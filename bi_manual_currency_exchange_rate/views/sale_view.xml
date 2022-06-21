@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_sale_form_exchange_rate_field_add_inherit" model="ir.ui.view">
+            <field name="name">view.sale.form.exchange.rate.field.add.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+            	<field name="payment_term_id" position="after">
+            		<field name="sale_manual_currency_rate_active" attrs="{'readonly': [('state','in',['sale','done','cancel'])]}"/>
+            		<field name="sale_manual_currency_rate" attrs="{'invisible': [('sale_manual_currency_rate_active', '=', False)], 'required':[('sale_manual_currency_rate_active', '=', True)], 'readonly': [('state','in',['sale','done','cancel'])]}"/>
+            	</field>
+            </field>
+        </record>
+	</data>
+</odoo>

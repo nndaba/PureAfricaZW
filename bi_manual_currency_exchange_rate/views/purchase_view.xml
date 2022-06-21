@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_purchase_form_exchange_rate_field_add_inherit" model="ir.ui.view">
+            <field name="name">view.purchase.form.exchange.rate.field.add.inherit</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+            	<field name="partner_ref" position="after">
+            		<field name="purchase_manual_currency_rate_active" attrs="{'readonly': [('state','in',['purchase','done','cancel'])]}"/>
+            		<field name="purchase_manual_currency_rate" attrs="{'invisible': [('purchase_manual_currency_rate_active', '=', False)],'required':[('purchase_manual_currency_rate_active', '=', True)],'readonly': [('state','in',['purchase','done','cancel'])]}"/>
+            	</field>
+            </field>
+        </record>
+	</data>
+</odoo>
