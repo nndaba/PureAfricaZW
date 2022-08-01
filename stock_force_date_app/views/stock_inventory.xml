@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<!-- picking -->
+		<record id="stock_force_view_picking_form" model="ir.ui.view">
+			<field name="name">stock.quant.view.form</field>
+			<field name="model">stock.picking</field>
+			<field name="inherit_id" ref="stock.view_picking_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='origin']" position="before">	
+					<field name="force_date" attrs="{'readonly': [('state', '=', 'done')]}" groups="stock_force_date_app.group_stock_force_date"/>
+				</xpath>
+			</field>
+		</record>
+
+        <record id="view_stock_quant_tree_inventory_editable_extended_stock_account" model="ir.ui.view">
+            <field name="name">stock.quant.inventory.tree.editable.extended.stock.account</field>
+            <field name="model">stock.quant</field>
+            <field name="inherit_id" ref="stock.view_stock_quant_tree_inventory_editable"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='product_uom_id']" position="after">
+                    <field name="force_date" groups="stock_force_date_app.group_stock_force_date"/>
+                </xpath>
+            </field>
+        </record>
+
+	</data>
+</odoo>
