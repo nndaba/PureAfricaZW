@@ -1,0 +1,49 @@
+<odoo>
+  <data>
+    <record id="pos_config_view_form_inherit_pos_bluetooth_printer" model="ir.ui.view">
+        <field name="name">pos.config.form.inherit.pos.bluetooth.printer</field>
+        <field name="model">pos.config</field>
+        <field name="inherit_id" ref="point_of_sale.pos_config_view_form"/>
+        <field name="arch" type="xml">
+            <div id="other_devices" position="after">
+                <div class="col-12 col-lg-6 o_setting_box" id="pos_bluetooth_printer">
+	                    <div class="o_setting_left_pane">
+	                        <field name="pos_bluetooth_printer"/>
+	                    </div>
+	                    <div class="o_setting_right_pane">
+	                        <label for="pos_bluetooth_printer" string="Direct Bluetooth Printer"/>
+	                        <div class="text-muted mb16">
+                                    Connect Bluetooth devices to your PoS directly without an IoT Box
+                            </div>
+                            <div class="content-group" attrs="{'invisible' : [('pos_bluetooth_printer', '=', False)]}">
+                                <div class="row">
+                                    <label string="Cashdrawer" for="bluetooth_cashdrawer" class="col-lg-3 o_light_label"/>
+                                    <field style="margin-bottom: 20px;" name="bluetooth_cashdrawer"/>
+                                </div>
+                                <div class="row">
+                                    <label string="Copies of receipts" for="receipt_copies" class="col-lg-3 o_light_label"/>
+                                    <field style="width: 10%; margin-bottom: 20px;" name="receipt_copies"/>
+                                </div>
+                                <div class="row">
+                                    <label for="receipt_types_views" string="Print Category/Label Receipt" class="col-lg-3 o_light_label"/>
+                                <field name="receipt_types_views" class="o_light_label" widget="radio"/>
+                                </div>
+                                <div class="row">
+                                    <label string="Use Different Bluetooth/USB/IP Printer for Category/Label Receipt at Port 9200" for="is_different_printer" class="col-lg-3 o_light_label"/>
+                                    <field style="margin-bottom: 20px;" name="is_different_printer"/>
+                                </div>
+                            </div>
+	                    </div>
+                </div>
+	        </div>
+            <xpath expr="//div[@id='auto_printing']//div[hasclass('o_setting_right_pane')]" position="inside">
+                <div class="content-group mt16" attrs="{'invisible' : ['|', ('iface_print_auto', '=', False), ('pos_bluetooth_printer', '=', False)]}">
+                    <div>
+                        <field name="bluetooth_print_auto" class="oe_inline"/><span class="oe_inline"><b>Print Category/Label receipts automatically once the payment is registered</b></span>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+  </data>
+</odoo>
