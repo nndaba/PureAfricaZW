@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+<t t-name="ReceiptScreen" t-inherit="point_of_sale.ReceiptScreen" t-inherit-mode="extension" owl="1">
+    <xpath expr="//div[hasclass('buttons')]" position="replace">
+        <div class="buttons" style="display: block !important;">
+            <t t-if="env.pos.config.pos_bluetooth_printer">
+                <t t-if="env.pos.config.receipt_types_views == 'categoryReceipt' and env.pos.pos_categ_id or env.pos.config.receipt_types_views == 'labelReceipt'">
+                     <div class="button print" style="margin: inherit;" t-on-click="printReceiptAndLabel">
+                        <i class="fa fa-print"></i> Print Receipt and Category/Label
+                    </div>
+                    <div class="button print" style="margin: inherit;" t-on-click="printReceipt">
+                        <i class="fa fa-print"></i> Print Receipt
+                    </div>
+                    <div class="button print" style="margin: inherit;" t-on-click="printLabel">
+                        <i class="fa fa-print"></i> Print Category/Label
+                    </div>
+                </t>
+                <t t-else="">
+                    <div class="button print" style="margin: inherit;" t-on-click="printReceipt">
+                        <i class="fa fa-print"></i> Print Receipt
+                    </div>
+                </t>
+            </t>
+            <t t-else="">
+                <div class="button print" style="margin: inherit;" t-on-click="printReceipt">
+                    <i class="fa fa-print"></i> Print Receipt
+                </div>
+            </t>
+
+        </div>
+    </xpath>
+
+
+    <xpath expr="//div[hasclass('pos-receipt-container')]" position="replace">
+        <t t-if="env.pos.config.pos_bluetooth_printer">
+            <div class="pos-receipt-container">
+                <OrderReceipt order="currentOrder" t-ref="order-receipt" />
+                <t t-if="env.pos.config.receipt_types_views == 'labelReceipt'">
+                    <t t-foreach="compute_product.products" t-as="label_receipt">
+                        <LabelReceipt order="currentOrder" category_receipt="label_receipt" t-ref="label-receipt" />
+                    </t>
+                </t>
+                <t t-if="env.pos.config.receipt_types_views == 'categoryReceipt' and env.pos.pos_categ_id">
+                    <t t-foreach="env.pos.pos_categ_id" t-as="category_receipt" t-key="category_receipt">
+                        <t t-set='count_t' t-value='0' />
+                        <t t-foreach="currentOrder.get_orderlines()" t-as="orderline">
+                            <t t-if="orderline.product.pos_categ_id">
+                                <t t-if="orderline.product.pos_categ_id[0] == category_receipt">
+                                    <t t-set='count_t' t-value='1' />
+                                </t>
+                            </t>
+                        </t>
+                        <t t-if="count_t">
+                            <CategoryReceipt order="currentOrder" category_receipt="category_receipt" t-ref="order-category_receipt" />
+                        </t>
+                    </t>
+                </t>
+            </div>
+        </t>
+        <t t-else="">
+            <div class="pos-receipt-container">
+                <OrderReceipt order="currentOrder" t-ref="order-receipt" />
+            </div>
+        </t>
+    </xpath>
+</t>
+
+<t t-name="OrderReceipt" t-inherit="point_of_sale.OrderReceipt" t-inherit-mode="extension" owl="1">
+    <xpath expr="//div[hasclass('pos-receipt-order-data')]" position="after">
+        <t t-if="env.pos.config.pos_bluetooth_printer">
+        <br />
+        <br />
+        </t>
+    </xpath>
+</t>
+
+<t t-name="SaleDetailsReport" t-inherit="point_of_sale.SaleDetailsReport" t-inherit-mode="extension" owl="1">
+    <xpath expr="//div[hasclass('pos-receipt-order-data')]" position="after">
+        <t t-if="pos.config.pos_bluetooth_printer">
+        <br />
+        <br />
+        </t>
+    </xpath>
+</t>
+
+</templates>

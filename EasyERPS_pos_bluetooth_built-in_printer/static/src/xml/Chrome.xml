@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="Chrome" t-inherit="point_of_sale.Chrome" t-inherit-mode="extension" owl="1">
+    <xpath expr="//div[hasclass('status-buttons')]" position="replace">
+        <t t-if="env.pos.config.pos_bluetooth_printer">
+            <div class="status-buttons">
+                <CashierName />
+                <SaleDetailsButton/>
+                <ProxyStatus t-if="env.pos.config.use_proxy" />
+                <ClientScreenButton t-if="clientScreenButtonIsShown" />
+                <SyncNotification />
+                <HeaderButton />
+            </div>
+        </t>
+        <t t-else="">
+            <div class="status-buttons">
+                <CashierName />
+                <SaleDetailsButton t-if="env.pos.proxy.printer" />
+                <ProxyStatus t-if="env.pos.config.use_proxy" />
+                <ClientScreenButton t-if="clientScreenButtonIsShown" />
+                <SyncNotification />
+                <HeaderButton />
+            </div>
+        </t>
+    </xpath>
+    </t>
+
+</templates>

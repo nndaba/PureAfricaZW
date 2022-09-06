@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="CategoryReceipt" owl="1">
+        <div class="pos-receipt">
+                <div style="text-align: center;margin-bottom: 10px;"><t t-esc="receipt.name" /></div>
+                <div class="order-date" style="margin-bottom: 10px;"><t t-esc="receipt.date.LocaleStringdateStyle"/><span t-esc="receipt.date.LocaleStringtimeStyle" class="pos-receipt-right-align"/></div>
+                <t t-if="env.pos.get_client()">
+                    <div class="table-info" style="padding-top: 0px !important;margin-bottom: 10px;">
+                        <div> <span>Client Name: </span><span><t t-esc="receipt.client.name"/></span></div>
+                        <t t-if="receipt.client.phone">
+                            <div> <span>Client Phone: </span><span><t t-esc="receipt.client.phone"/></span></div>
+                        </t>
+                    </div>
+                </t>
+                    <div style="font-size: 150% !important; display: grid; justify-content: center;">
+                        <t t-set='count_v' t-value='0' />
+                        <t t-foreach="receipt.orderlines" t-as="orderline">
+                                <t t-if="orderline.pos_categ_id[0] == props.category_receipt">
+                                    <t t-if="count_v == 0">
+                                        <tr>
+                                            <td><b><t t-esc="orderline.pos_categ_id[1]"/></b></td>
+                                            <t t-set='count_v' t-value='1' />
+                                        </tr>
+                                    </t>
+                                </t>
+                            </t>
+                    </div>
+                <div class="orderlines">
+                    <table class="mine-table">
+                        <colgroup>
+                        <col width='10%'/>
+                        <col width='80%'/>
+                    </colgroup>
+                        <thead>
+                            <tr>
+                                <th > <span class="start">Qty</span></th>
+                                <th > <span >Item</span></th>
+                            </tr>
+                        </thead>
+                        <t t-foreach="receipt.orderlines" t-as="orderline">
+                            <tbody>
+                            <t t-if="orderline.pos_categ_id[0] == props.category_receipt">
+                                <tr>
+                                    <td style='text-align:center;float:none'>
+                                        <t t-esc="orderline.quantity"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="orderline.product_name_wrapped[0]"/>
+                                    </td>
+                                </tr>
+                            </t>
+                            </tbody>
+                        </t>
+                    </table>
+                </div>
+            <div class="order-date" style="margin-bottom: 10px;">
+
+            </div>
+            <br />
+            <br />
+        </div>
+    </t>
+</templates>

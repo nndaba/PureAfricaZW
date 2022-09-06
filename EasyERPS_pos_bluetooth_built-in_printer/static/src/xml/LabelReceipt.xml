@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="NameWrapped" owl="1">
+        <t t-foreach="change.name_wrapped.slice(1)" t-as="wrapped_line">
+            <div style="text-align: right">
+                <span t-esc="wrapped_line"/>
+            </div>
+        </t>
+    </t>
+
+    <t t-name="LabelReceipt" owl="1">
+        <div class="pos-receipt">
+            <div style="text-align: center;margin-bottom: 10px;"><t t-esc="receipt.name" /></div>
+            <div class="order-date" style="margin-bottom: 10px;"><t t-esc="receipt.date.LocaleStringdateStyle"/><span t-esc="receipt.date.LocaleStringtimeStyle" class="pos-receipt-right-align"/></div>
+            <t t-if="env.pos.get_client()">
+                <div class="table-info" style="padding-top: 0px !important;margin-bottom: 10px;">
+                        <div> <span>Client Name: </span><span><t t-esc="receipt.client.name"/></span></div>
+                        <t t-if="receipt.client.phone">
+                            <div> <span>Client Phone: </span><span><t t-esc="receipt.client.phone"/></span></div>
+                        </t>
+                </div>
+            </t>
+            <div style="font-size: 150% !important; display: grid; justify-content: center; margin-bottom: 10px;">
+                <div class="multiprint-flex">
+                    <t t-esc="props.category_receipt.product.display_name"/>
+                    <t t-if="props.category_receipt.description">
+                     ( <t t-esc="props.category_receipt.description"/> )
+                    </t>
+                </div>
+            </div>
+            <br />
+            <br />
+        </div>
+    </t>
+</templates>
