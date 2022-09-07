@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="wizard_manufacturing_transfer_form_readonly" model="ir.ui.view">
+            <field name="name">wizard.manufacturing.transfer.form.readonly</field>
+            <field name="model">wizard.validate.manufacturing.transfer</field>
+            <field name="arch" type="xml">
+                <form string="Wizard">
+                    <group>
+                        <field name="transfer_date"/>
+                        <field name="transfer_remark"/>
+                    </group>
+                <footer> 
+                    <button name="custom_backdateorder_button" type="object" string="Process" class="oe_highlight"/> or <button name="cancel" string="Cancel" special="cancel" class="oe_link"/> 
+                </footer>
+                </form>
+            </field>
+        </record>
+
+    <record id="wizard_manufacturing_transfer_action_window" model="ir.actions.act_window">
+            <field name="name">Process Manufacturing Transfer</field>
+            <field name="res_model">wizard.validate.manufacturing.transfer</field>
+            <field name="binding_view_types">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+    </record>
+
+</odoo>

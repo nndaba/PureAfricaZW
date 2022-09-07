@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<record id="wizard_scrap_order_form_readonly" model="ir.ui.view">
+            <field name="name">wizard.scrap.order.form.readonly</field>
+            <field name="model">wizard.scrap.order.backdate</field>
+            <field name="arch" type="xml">
+                <form string="Wizard">
+                    <group>
+                        <field name="scrap_backdate"/>
+                        <field name="scrap_remarks"/>
+                </group>
+                <footer> 
+                    <button name="scrap_order_confirm" type="object" string="Process Backdate" class="oe_highlight"/> or <button name="cancel" string="Cancel" special="cancel" class="oe_link"/> 
+                </footer>
+                </form>
+            </field>
+        </record>
+
+<record id="wizard_scrap_order_action_window" model="ir.actions.act_window">
+        <field name="name">Process Backdate and Remarks</field>
+        <field name="res_model">wizard.scrap.order.backdate</field>
+        <field name="binding_view_types">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+</record>
+
+</odoo>

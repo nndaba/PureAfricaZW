@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	
+		<record id="confirmation_date_wizard" model="ir.ui.view">
+			<field name="name">confirmation.date.wizard</field>
+			<field name="model">confirmation.date.wizard</field>
+			<field name="arch" type="xml">
+				<form string="Confirmation date">
+					<group>
+						<field name="confirmation_force_date"/>
+					</group>
+					
+					<footer>
+						<button name="action_confirm" type="object" string="Confirm" class="btn btn-primary active" icon="fa-pencil-square"/>
+						<button string="Cancel" class="btn btn-danger disabled" special="cancel" icon="fa-times"/>
+					</footer>
+				</form>
+			</field>
+		</record>
+	
+	
+	
+	
+		<record id="sale_order_view_inherit" model="ir.ui.view">
+	        <field name="name">sale.order.view.inherit</field>
+	        <field name="model">sale.order</field>
+	        <field name="inherit_id" ref="sale.view_order_form"/>
+	        <field name="arch" type="xml">
+	        
+	            <xpath expr="//button[@name='action_confirm']" position="after">
+	                <button name="action_confirm_inherit" string="Confirm Sale" type="object" attrs="{'invisible': [('state', 'not in', ['draft'])]}"/>
+	            </xpath>
+	            
+	            <xpath expr="//button[@name='action_confirm'][2]" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+	            
+	        </field>
+	    </record>
+	
+	
+	
+	
+	
+		
+	
+	
+	
+		
+</odoo>

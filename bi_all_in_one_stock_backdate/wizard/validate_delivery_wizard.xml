@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+		<record id="view_change_stock_item" model="ir.ui.view">
+			<field name="name">Change Info</field>
+			<field name="model">change.module</field>
+			<field name="arch" type="xml">
+			<form string="Transfer Remark">
+                    <p class="oe_grey">
+                        
+                    </p>
+                    <group>
+                        <field name="transfer_date"/>
+                        <field name="remark"/>
+                    </group>
+                    <footer>
+						<button name="action_apply" string="Apply" type="object" 
+							 class="btn-primary"/>
+						<button string="Cancel" class="btn-default" special="cancel"/>
+					</footer>		
+				</form>
+			</field>
+		</record>
+		<record id="action_view_change_stock_item" model="ir.actions.act_window">
+			<field name="name">Change Info</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">change.module</field>
+			<field name="binding_view_types">form</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+		</record>
+
+</odoo>

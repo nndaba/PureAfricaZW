@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record id="wizard_mass_assign_backdate" model="ir.ui.view">
+			<field name="name">wizard.mass.assign.backdate</field>
+			<field name="model">mass.assign.backdate.wizard</field>
+			<field name="arch" type="xml">
+				<form string="Assign Backdate" >
+					<group>
+						<field name ="account_move_ids" widget = "many2many_tags" invisible ="1"/>
+						<field name="invoice_date" readonly="False"/>
+						<field name="remarks" readonly="False" attrs="{'invisible': [('enable_remark','=',False)],'required':[('inv_remark','=',True)]}"/>
+						<field name ="enable_remark" invisible ="1"/>	
+						<field name ="inv_remark" invisible ="1"/>			
+				   </group>		  
+					<footer>
+						<button name="on_click_confirm" string="Confirm" type="object" class="oe_highlight" />
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="mass_order_invoice_act_window" model="ir.actions.server" >
+        <field name="name">Mass Assign Backdate</field>
+        <field name="model_id" ref="bi_all_in_one_stock_backdate.model_mass_assign_backdate_wizard"/>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="groups_id" eval="[(4, ref('bi_all_in_one_stock_backdate.group_mass_backdate'))]"/>
+        <field name="binding_view_types">list,form</field>
+		  <field name="state">code</field>
+        <field name="code">action = model.invoice_backdate_wizard()</field>
+      </record>
+	</data>
+</odoo>
+

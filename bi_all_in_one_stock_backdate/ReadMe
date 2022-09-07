@@ -1,0 +1,5 @@
+15.0.0.1 ==>: Fixed issue in accounting entries set the date into backdate.
+
+15.0.0.2 (1-2-22): added functionality sale confirmation force date and purchase confirmation force date
+
+15.0.0.3 (25-2-22) : added functionality of invoice backdate.

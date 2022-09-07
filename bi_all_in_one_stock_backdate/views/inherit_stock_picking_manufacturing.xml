@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <record id="inherit_stockpicking_remark_form_readonly" model="ir.ui.view">
+            <field name="name">inherit.stockpicking.form.readonly</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='company_id']" position="after">
+                    <field name="line_remark"/>
+                </xpath>
+
+                <xpath expr="//button[@name='button_mark_done'][1]" position="replace">
+                    <button name="button_done_mark" attrs="{'invisible': ['|', ('state', 'in', ('draft', 'cancel', 'done', 'to_close')), ('qty_producing', '=', 0)]}" string="Validate" type="object" class="oe_highlight"/>
+                </xpath>
+                
+                
+<!--                 <xpath expr="//button[@name='button_mark_done'][1]" position="replace"> -->
+<!--                     <button name="button_done_mark" string="Validate" type="object" class="oe_highlight"/> -->
+<!--                 </xpath> -->
+                
+                
+               <xpath expr="//button[@name='button_mark_done']" position="replace">
+                	<button name="button_done_mark" attrs="{'invisible': [
+                         '&amp;',
+                         '|',
+                         ('state', 'not in', ('confirmed', 'progress')),
+                         ('qty_producing', '!=', 0),
+                         ('state', '!=', 'to_close')]}" string="Mark as Done" type="object" class="oe_highlight"/>
+                </xpath>
+                
+            </field>
+    </record>
+
+
+    <record id="inherit_pickmovelining_remark_form_readonly" model="ir.ui.view">
+            <field name="name">inherit.pickmovelining.form.readonly</field>
+            <field name="model">stock.move.line</field>
+            <field name="inherit_id" ref="stock.view_move_line_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='lot_id']" position="after">
+                    <field name="line_remark"/>
+                </xpath>
+            </field>
+    </record>
+</odoo>
