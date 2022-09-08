@@ -134,9 +134,11 @@ class StockMove(models.Model):
 					if move.account_move_ids:
 						for account_move in move.account_move_ids:
 							self.env.cr.execute(
-            						"UPDATE account_move SET date = %s WHERE id = %s",
-            							[force_date, account_move.id])
-							# account_move.write({'date':force_date})
+									"UPDATE account_move SET date = %s WHERE id = %s",
+										[force_date, account_move.id])
+							if account_move.line_ids:
+								for line in account_move.line_ids:
+									line.write({'date':force_date})
 		return res
 
 
@@ -160,3 +162,32 @@ class StockMove(models.Model):
 				'move_type': 'entry',
 			})
 			new_account_move._post()
+
+
+class AccountMove(models.Model):
+	_inherit = 'account.move'
+
+
+	@api.constrains('name', 'journal_id', 'state')
+	def _check_unique_sequence_number(self):
+		moves = self.filtered(lambda move: move.state == 'posted')
+		if not moves:
+			return
+
+		self.flush(['name', 'journal_id', 'move_type', 'state'])
+		if not self.env.user.has_group('stock_force_date_app.group_stock_force_date'):
+			# /!\ Computed stored fields are not yet inside the database.
+			self._cr.execute('''
+				SELECT move2.id, move2.name
+				FROM account_move move
+				INNER JOIN account_move move2 ON
+					move2.name = move.name
+					AND move2.journal_id = move.journal_id
+					AND move2.move_type = move.move_type
+					AND move2.id != move.id
+				WHERE move.id IN %s AND move2.state = 'posted'
+			''', [tuple(moves.ids)])
+			res = self._cr.fetchall()
+			if res:
+				raise ValidationError(_('Posted journal entry must have an unique sequence number per company.\n'
+										'Problematic numbers: %s\n') % ', '.join(r[1] for r in res))
