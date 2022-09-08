@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="inherit_picking_remark_form_readonly" model="ir.ui.view">
+            <field name="name">inherit.picking.form.readonly</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='button_validate']" position="replace">
+                    <button name="button_validate_custom" type="object" string="Validate" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'assigned')]}"/>
+                </xpath>
+                <xpath expr="//field[@name='move_ids_without_package']/tree//field[@name='product_id']" position="after">
+                    <field name="move_remark"/>
+                </xpath>
+
+            </field>
+    </record>
+
+    <record id="inherit_stockmoves_view_form_readonly" model="ir.ui.view">
+            <field name="name">inherit.stockmove.form.readonly</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='date']" position="after" >
+                    <field name="move_date" invisible="1"/>
+                    <field name="move_remark"/>
+
+                </xpath>
+            </field>
+        </record>
+</odoo>

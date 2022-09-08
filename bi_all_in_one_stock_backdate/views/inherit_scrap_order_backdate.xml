@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="inherit_stockscraporder_view_form_readonly" model="ir.ui.view">
+            <field name="name">inherit.stockscraporder.form.readonly</field>
+            <field name="model">stock.scrap</field>
+            <field name="inherit_id" ref="stock.stock_scrap_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='company_id']" position="after">
+                    <field name="move_remarks_scrap"/>
+                </xpath>
+            </field>
+        </record>
+
+</odoo>

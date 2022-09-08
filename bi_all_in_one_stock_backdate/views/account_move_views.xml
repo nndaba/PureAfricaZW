@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_account_move_form" model="ir.ui.view">
+            <field name="name">view.account.move.form</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="ref" position="after">
+                        <field name="remarks" />
+                    </field>
+                </data> 
+            </field>
+        </record>
+
+        <record id="view_account_move_line_form" model="ir.ui.view">
+            <field name="name">view.account.move.line.form</field>
+            <field name="model">account.move.line</field>
+            <field name="inherit_id" ref="account.view_move_line_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="date" position="after">
+                        <field name="remarks" attrs="{'invisible': [('remarks','=',False)]}"/>
+                    </field>
+                </data> 
+            </field>
+        </record>
+    </data>
+</odoo>
