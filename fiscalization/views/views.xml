@@ -39,7 +39,7 @@
       <field name="inherit_id" ref="account.view_move_form" />
       <field name="arch" type="xml">
         <xpath expr="//button[@name='action_register_payment']" position="after">
-		<button name="handle_fiscalize" string="Fiscalize" type="object" style="background:rgba(46, 210, 162,0.2);" attrs="{'invisible': ['!', '&amp;','&amp;',('move_type','=', 'out_invoice'),('state','=', 'posted'),'&amp;',('state','=', 'posted'),'&amp;',('move_type','=','out_invoice'),('fiscal_signature','=', False)]}" />
+		<button name="handle_fiscalize" string="Fiscalize" type="object" style="background:rgba(46, 210, 162,0.2);" attrs="{'invisible': ['!', '&amp;','&amp;',('move_type','=', 'out_invoice'),('state','=', 'posted'),'&amp;',('state','=', 'posted'),'&amp;',('move_type','=','out_invoice')]}" />
         </xpath>
         <xpath expr="//field[@name='payment_reference']" position="after">
           <field name="fiscal_signature" readonly="1"/>
