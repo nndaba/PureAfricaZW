@@ -1,0 +1,102 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+<!--
+    <record model="ir.ui.view" id="fiscalization.list">
+      <field name="name">fiscalization list</field>
+      <field name="model">fiscalization.fiscalization</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+-->
+
+
+    <record model="ir.ui.view" id="message_box_view">
+      <field name="name">View Message</field>
+      <field name="model">fiscalization.dialog.box</field>
+      <field name="arch" type="xml">
+        <form string="Message Reason">
+          <group>
+            <field name="message" />
+          </group>
+
+          <footer>
+            <button string="Ok" class="btn btn-info" special="cancel" />
+          </footer>
+        </form>
+      </field>
+    </record>
+
+    
+    <record model="ir.ui.view" id="account_movzi_item_ref">
+      <field name="name">Account Move</field>
+      <field name="model">account.move</field>
+      <field name="inherit_id" ref="account.view_move_form" />
+      <field name="arch" type="xml">
+        <xpath expr="//button[@name='action_register_payment']" position="after">
+		<button name="handle_fiscalize" string="Fiscalize" type="object" style="background:rgba(46, 210, 162,0.2);" attrs="{'invisible': ['!', '&amp;','&amp;',('move_type','=', 'out_invoice'),('state','=', 'posted'),'&amp;',('state','=', 'posted'),'&amp;',('move_type','=','out_invoice'),('fiscal_signature','=', False)]}" />
+        </xpath>
+        <xpath expr="//field[@name='payment_reference']" position="after">
+          <field name="fiscal_signature" readonly="1"/>
+          <field name="fiscal_date" readonly="1"/>
+        </xpath>
+      </field>
+    </record>
+   
+    <!-- actions opening views on models -->
+<!--
+    <record model="ir.actions.act_window" id="fiscalization.action_window">
+      <field name="name">fiscalization window</field>
+      <field name="res_model">fiscalization.fiscalization</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+-->
+
+  <record model="ir.actions.act_window" id="fiscalization.action_window">
+    <field name="name">Display Message</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">fiscalization.dialog.box</field>
+    <field name="view_mode">form</field>
+    <field name="view_id" ref="message_box_view"/>
+    <field name="target">new</field>
+  </record>
+
+    <!-- server action to the one above -->
+<!--
+    <record model="ir.actions.server" id="fiscalization.action_server">
+      <field name="name">fiscalization server</field>
+      <field name="model_id" ref="model_fiscalization_fiscalization"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+
+    <!-- Top menu item -->
+<!--
+    <menuitem name="fiscalization" id="fiscalization.menu_root"/>
+-->
+    <!-- menu categories -->
+<!--
+    <menuitem name="Menu 1" id="fiscalization.menu_1" parent="fiscalization.menu_root"/>
+    <menuitem name="Menu 2" id="fiscalization.menu_2" parent="fiscalization.menu_root"/>
+-->
+    <!-- actions -->
+<!--
+    <menuitem name="List" id="fiscalization.menu_1_list" parent="fiscalization.menu_1"
+              action="fiscalization.action_window"/>
+    <menuitem name="Server to list" id="fiscalization" parent="fiscalization.menu_2"
+              action="fiscalization.action_server"/>
+-->
+  </data>
+</odoo>

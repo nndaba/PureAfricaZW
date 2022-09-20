@@ -1,0 +1,20 @@
+<odoo>
+    <data>
+	<template id="fiscilization_name_document" inherit_id="account.report_invoice_document">
+		<xpath expr="//t/div/h2/span[1]" position="before">
+			<t t-if="o.fiscal_signature">
+				<span>Fiscal</span> 
+			</t>
+		</xpath>
+		
+	      <xpath expr="//t/div/div[4]" position="after">
+		<t t-if="o.fiscal_signature">
+		      <td> <span style="font-weight:bold;">Fiscal Signature</span></td><br />
+		      <td>
+              <span style="text-align: center" t-field="o.fiscal_signature"/>
+      </td>
+      </t>
+          </xpath>
+      </template>
+    </data>
+</odoo>

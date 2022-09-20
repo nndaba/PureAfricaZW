@@ -1,0 +1,41 @@
+
+<odoo>
+  <data>
+    <record model="ir.cron" id="account_move_cron">
+        <field name="name">Account move - Zimre - Current</field>
+        <field name="model_id" ref="model_account_move"/>
+        <field name="type">ir.actions.server</field>
+        <field name="state">code</field>
+        <field name="code">model.handle_current_invoices()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">1</field>
+        <field name="active">false</field>
+    </record>
+
+    <record model="ir.cron" id="account_move_cron_2">
+        <field name="name">Account move - Zimre - Old</field>
+        <field name="model_id" ref="model_account_move"/>
+        <field name="type">ir.actions.server</field>
+        <field name="state">code</field>
+        <field name="code">model.handle_old_invoices()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">1</field>
+        <field name="active">false</field>
+    </record>
+
+    <record model="ir.cron" id="account_move_cron_3">
+        <field name="name">Account move - Zimre - Custom</field>
+        <field name="model_id" ref="model_account_move"/>
+        <field name="type">ir.actions.server</field>
+        <field name="state">code</field>
+        <field name="code">model.handle_custom_invoices(153768)</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">1</field>
+        <field name="active">false</field>
+    </record>
+
+</data>
+</odoo>
