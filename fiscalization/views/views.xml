@@ -42,10 +42,10 @@
           <button name="handle_fiscalize" string="Fiscalize" type="object" style="background:rgba(46, 210, 162,0.2);" 
           attrs="{'invisible': ['|',('state', '==', 'draft'),('move_type','!=','out_invoice')]}" />
         </xpath>
-        <xpath expr="//field[@name='payment_reference']" position="after">
+        <field name="payment_reference" position="after">
           <field name="fiscal_signature" readonly="1" />
           <field name="fiscal_date" readonly="1"/>
-        </xpath>
+        </field>
       </field>
     </record>
    
