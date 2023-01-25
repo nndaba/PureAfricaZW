@@ -1,19 +1,94 @@
 <odoo>
     <data>
-	<template id="fiscilization_name_document" inherit_id="account.report_invoice_document">
-		<xpath expr="//t/div/h2/span[1]" position="before">
-			<t t-if="o.fiscal_signature">
-				<span>Fiscal</span> 
-			</t>
-		</xpath>
-		
-	      <xpath expr="//t/div/div[4]" position="after">
-		<t t-if="o.fiscal_signature">
-		      <td> <span style="font-weight:bold;">Fiscal Signature</span></td><br />
-		      <td>
-              <span style="text-align: center" t-field="o.fiscal_signature"/>
-      </td>
-      </t>
+<!--
+        <template id="listing">
+          <ul>
+            <li t-foreach="objects" t-as="object">
+              <a t-attf-href="#{ root }/objects/#{ object.id }">
+                <t t-esc="object.display_name"/>
+              </a>
+            </li>
+          </ul>
+        </template>
+        <template id="object">
+          <h1><t t-esc="object.display_name"/></h1>
+          <dl>
+            <t t-foreach="object._fields" t-as="field">
+              <dt><t t-esc="field"/></dt>
+              <dd><t t-esc="object[field]"/></dd>
+            </t>
+          </dl>
+        </template>
+-->
+
+
+
+      <template id="fiscalization_report_invoice_document" inherit_id="account.report_invoice_document">
+          <xpath expr="/t/t/div/div[2]/div/div/table/t[2]/t/t[3]/tr/td[1]" position="before">
+            <td>
+              <span t-field="o.fiscal_signature"/>
+            </td>
+          </xpath>
+          <xpath expr="/t/t/div/p[1]" position="after">
+            <div class="row">
+              <div class="col">
+                <span t-field="o.fiscal_signature"/>
+              </div>
+            </div>
+          </xpath>
+          <xpath expr="/t[1]/t[1]/div[1]/div[3]/div[1]/span[1]" position="attributes">
+            <attribute name="t-options-widget">"text"</attribute>
+          </xpath>
+          <xpath expr="/t/t/div/div[3]" position="attributes">
+            <attribute name="class" separator=" " add="text-center"/>
+          </xpath>
+          
+          <xpath expr="/t[1]/t[1]/div[1]/div[3]/div[1]" position="replace"/>
+          <xpath expr="/t[1]/t[1]/div[1]/div[2]/div[1]/div[1]/table[1]/t[2]/t[1]/t[3]/tr[1]/td[2]" position="replace"/>
+          <xpath expr="/t[1]/t[1]/div[1]/div[2]/div[1]/div[1]/table[1]/t[2]/t[1]/t[3]/tr[1]/td[1]" position="replace"/>
+          
+          <xpath expr="/t/t/div/p[1]" position="after">
+            <div class="row">
+              <div class="col">
+                <span>New Text Block</span>
+              </div>
+            </div>
+          </xpath>
+          <xpath expr="/t/t/div/div[3]/div/span" position="replace">
+            <span>Zimra Signature</span>
+          </xpath>
+          
+          <xpath expr="/t/t/div/div[4]" position="after">
+            <div class="row">
+              <div class="col-3">
+                <span>
+                  <strong>Signature:</strong>
+                  <br/>
+                </span>
+                <span t-field="o.fiscal_signature"/>
+              </div>
+              <div class="col-3"/>
+              <div class="col-3"/>
+              <div class="col-3"/>
+            </div>
+          </xpath>
+          <xpath expr="/t/t/div/div[5]" position="attributes">
+            <attribute name="class" separator=" " add="text-center"/>
+          </xpath>
+          <xpath expr="/t[1]/t[1]/div[1]/div[5]/div[1]/span[1]/strong[1]" position="replace"/>
+          <xpath expr="/t[1]/t[1]/div[1]/div[5]/div[1]/span[2]" position="replace"/>
+          <xpath expr="/t/t/div/div[3]" position="after">
+            <div class="row">
+              <div class="col">
+                <span t-field="o.fiscal_signature"/>
+              </div>
+            </div>
+          </xpath>
+          <xpath expr="/t/t/div/div[3]" position="attributes">
+            <attribute name="class" separator=" " add="text-center"/>
+          </xpath>
+          <xpath expr="/t/t/div/div[4]" position="attributes">
+            <attribute name="class" separator=" " add="text-center"/>
           </xpath>
       </template>
     </data>

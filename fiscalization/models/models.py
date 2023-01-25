@@ -7,6 +7,19 @@ import requests
 import datetime
 from datetime import timedelta
 
+# class fiscalization(models.Model):
+#     _name = 'fiscalization.fiscalization'
+#     _description = 'fiscalization.fiscalization'
+
+#     name = fields.Char()
+#     value = fields.Integer()
+#     value2 = fields.Float(compute="_value_pc", store=True)
+#     description = fields.Text()
+#
+#     @api.depends('value')
+#     def _value_pc(self):
+#         for record in self:
+#             record.value2 = float(record.value) / 100
 
 
 class DialogBox(models.TransientModel):
@@ -25,8 +38,7 @@ class account_move(models.Model):
 
     @api.model
     def handle_fiscalize(self, account_info):
-        # url = "http://41.191.232.21:5004/net_post"
-        url = "http://196.27.106.118:3000/pos/post"
+        url = "http://154.119.80.13:3000/revmax/post"
 
         headers = {'Content-Type': 'application/json'}
         message = ""
