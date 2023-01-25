@@ -27,7 +27,7 @@
         'security/fiscalization_security.xml',
         'security/ir.model.access.csv',
         'views/views.xml',
-        'views/templates.xml',
+       # 'views/templates.xml',
         'views/cron.xml'
     ],
     # only loaded in demonstration mode
