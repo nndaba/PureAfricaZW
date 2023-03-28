@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
 # Part of BrowseInfo. See LICENSE file for full copyright and licensing details.
 
-from odoo import fields, models,api, _
-from odoo.exceptions import UserError, Warning, ValidationError
-from odoo.tools.misc import get_lang
-from odoo.osv import expression
-from odoo.tools import float_is_zero, float_compare, float_round
-
+from odoo import fields, models, api, tools, _
 
 class SaleOrder(models.Model):
     _inherit ='sale.order'
@@ -25,97 +20,14 @@ class SaleOrder(models.Model):
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
-
-    @api.onchange('product_id')
-    def product_id_change(self):
-        if not self.product_id:
-            return
-        valid_values = self.product_id.product_tmpl_id.valid_product_template_attribute_line_ids.product_template_value_ids
-        # remove the is_custom values that don't belong to this template
-        for pacv in self.product_custom_attribute_value_ids:
-            if pacv.custom_product_template_attribute_value_id not in valid_values:
-                self.product_custom_attribute_value_ids -= pacv
-
-        # remove the no_variant attributes that don't belong to this template
-        for ptav in self.product_no_variant_attribute_value_ids:
-            if ptav._origin not in valid_values:
-                self.product_no_variant_attribute_value_ids -= ptav
-
-        vals = {}
-        if not self.product_uom or (self.product_id.uom_id.id != self.product_uom.id):
-            vals['product_uom'] = self.product_id.uom_id
-            vals['product_uom_qty'] = self.product_uom_qty or 1.0
-
-        product = self.product_id.with_context(
-            lang=get_lang(self.env, self.order_id.partner_id.lang).code,
-            partner=self.order_id.partner_id,
-            quantity=vals.get('product_uom_qty') or self.product_uom_qty,
-            date=self.order_id.date_order,
-            pricelist=self.order_id.pricelist_id.id,
-            uom=self.product_uom.id
-        )
-
-        vals.update(name=self.get_sale_order_line_multiline_description_sale(product))
-
-        self._compute_tax_id()
-        company = self.order_id.company_id
-
-        if self.order_id.sale_manual_currency_rate_active:
-            currency_rate = self.order_id.sale_manual_currency_rate/company.currency_id.rate
-            price_unit = self.product_id.lst_price
-            manual_currency_rate = price_unit * currency_rate            
-            vals['price_unit'] = manual_currency_rate
-            vals['name'] = self.product_id.name
-        elif self.order_id.pricelist_id and self.order_id.partner_id:
-            vals['price_unit'] = self.env['account.tax']._fix_tax_included_price_company(self._get_display_price(product), product.taxes_id, self.tax_id, self.company_id)
-        
-        self.update(vals)
-
-        if product.sale_line_warn != 'no-message':
-            if product.sale_line_warn == 'block':
-                self.product_id = False
-
-            return {
-                'warning': {
-                    'title': _("Warning for %s", product.name),
-                    'message': product.sale_line_warn_msg,
-                }
-            }
-
-
-
-    @api.onchange('product_uom', 'product_uom_qty')
-    def product_uom_change(self):
-        if not self.order_id.pricelist_id:
-            raise UserError(_("Please Select Pricelist First."))
-        if not self.product_uom or not self.product_id:
-            self.price_unit = 0.0
-            return
-        if self.order_id.pricelist_id and self.order_id.partner_id:
-            product = self.product_id.with_context(
-                lang=self.order_id.partner_id.lang,
-                partner=self.order_id.partner_id,
-                quantity=self.product_uom_qty,
-                date=self.order_id.date_order,
-                pricelist=self.order_id.pricelist_id.id,
-                uom=self.product_uom.id,
-                fiscal_position=self.env.context.get('fiscal_position')
-            )
-
-        company = self.order_id.company_id
-        if self.order_id.sale_manual_currency_rate_active:
-            currency_rate = self.order_id.sale_manual_currency_rate/company.currency_id.rate
-            price_unit = self.product_id.lst_price
-            manual_currency_rate = price_unit * currency_rate
-            self.price_unit = manual_currency_rate
-            self.name = self.product_id.name
-        else:
-            self.price_unit = self.env['account.tax']._fix_tax_included_price_company(self._get_display_price(product), product.taxes_id, self.tax_id, self.company_id)
-    
+    def _get_product_price_context(self):
+        result = super(SaleOrderLine, self)._get_product_price_context()
+        result['manual_currency_rate_active'] = self.order_id.sale_manual_currency_rate_active
+        result['manual_currency_rate'] = self.order_id.sale_manual_currency_rate
+        return result
 
 class SaleAdvancePaymentInv(models.TransientModel):
     _inherit = "sale.advance.payment.inv"
-
 
     def _create_invoice(self, order, so_line, amount):
         res = super(SaleAdvancePaymentInv,self)._create_invoice(order, so_line, amount)
@@ -123,3 +35,98 @@ class SaleAdvancePaymentInv(models.TransientModel):
             res.write({'manual_currency_rate_active':order.sale_manual_currency_rate_active,'manual_currency_rate':order.sale_manual_currency_rate})
         return res
 
+class PricelistItem(models.Model):
+    _inherit = 'product.pricelist.item'
+
+    def _compute_price(self, product, quantity, uom, date, currency=None):
+        """Compute the unit price of a product in the context of a pricelist application.
+
+        :param product: recordset of product (product.product/product.template)
+        :param float qty: quantity of products requested (in given uom)
+        :param uom: unit of measure (uom.uom record)
+        :param datetime date: date to use for price computation and currency conversions
+        :param currency: pricelist currency (for the specific case where self is empty)
+
+        :returns: price according to pricelist rule, expressed in pricelist currency
+        :rtype: float
+        """
+        product.ensure_one()
+        uom.ensure_one()
+
+        currency = currency or self.currency_id
+        currency.ensure_one()
+
+        manual_currency_rate_active = self._context.get('manual_currency_rate_active')
+        manual_currency_rate = self._context.get('manual_currency_rate')
+
+        # Pricelist specific values are specified according to product UoM
+        # and must be multiplied according to the factor between uoms
+        product_uom = product.uom_id
+        if product_uom != uom:
+            convert = lambda p: product_uom._compute_price(p, uom)
+        else:
+            convert = lambda p: p
+
+        if self.compute_price == 'fixed':
+            price = convert(self.fixed_price)
+        elif self.compute_price == 'percentage':
+            base_price = self._compute_base_price(product, quantity, uom, date, currency)
+            price = (base_price - (base_price * (self.percent_price / 100))) or 0.0
+        elif self.compute_price == 'formula':
+            base_price = self._compute_base_price(product, quantity, uom, date, currency)
+            # complete formula
+            price_limit = base_price
+            price = (base_price - (base_price * (self.price_discount / 100))) or 0.0
+            if self.price_round:
+                price = tools.float_round(price, precision_rounding=self.price_round)
+
+            if self.price_surcharge:
+                price += convert(self.price_surcharge)
+
+            if self.price_min_margin:
+                price = max(price, price_limit + convert(self.price_min_margin))
+
+            if self.price_max_margin:
+                price = min(price, price_limit + convert(self.price_max_margin))
+        else:  # empty self, or extended pricelist price computation logic
+            if manual_currency_rate_active:
+                self = self.with_context(manual_currency_rate_active=manual_currency_rate_active,manual_currency_rate=manual_currency_rate)
+            price = self._compute_base_price(product, quantity, uom, date, currency)
+
+        return price
+
+    def _compute_base_price(self, product, quantity, uom, date, target_currency):
+        """ Compute the base price for a given rule
+
+        :param product: recordset of product (product.product/product.template)
+        :param float qty: quantity of products requested (in given uom)
+        :param uom: unit of measure (uom.uom record)
+        :param datetime date: date to use for price computation and currency conversions
+        :param target_currency: pricelist currency
+
+        :returns: base price, expressed in provided pricelist currency
+        :rtype: float
+        """
+        target_currency.ensure_one()
+
+        manual_currency_rate_active = product._context.get('manual_currency_rate_active')
+        manual_currency_rate = product._context.get('manual_currency_rate')
+
+        rule_base = self.base or 'list_price'
+        if rule_base == 'pricelist' and self.base_pricelist_id:
+            price = self.base_pricelist_id._get_product_price(product, quantity, uom, date)
+            src_currency = self.base_pricelist_id.currency_id
+        elif rule_base == "standard_price":
+            src_currency = product.cost_currency_id
+            price = product.price_compute(rule_base, uom=uom, date=date)[product.id]
+        else: # list_price
+            src_currency = product.currency_id
+            price = product.price_compute(rule_base, uom=uom, date=date)[product.id]
+
+        if src_currency != target_currency:
+            if manual_currency_rate_active:
+                price = price * manual_currency_rate
+            else:
+                price = src_currency._convert(price, target_currency, self.env.company, date, round=False)
+
+        return price
