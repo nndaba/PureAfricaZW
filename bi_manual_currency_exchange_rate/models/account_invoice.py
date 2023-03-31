@@ -399,13 +399,13 @@ class account_invoice(models.Model):
                     raise UserError(
                         _('Exchange Rate Field is required , Please fill that.'))
 
-    @api.onchange('manual_currency_rate_active', 'currency_id')
-    def check_currency_id(self):
-        if self.manual_currency_rate_active:
-            if self.currency_id == self.company_id.currency_id:
-                self.manual_currency_rate_active = False
-                raise UserError(
-                    _('Company currency and invoice currency same, You can not add manual Exchange rate for same currency.'))
+    # @api.onchange('manual_currency_rate_active', 'currency_id')
+    # def check_currency_id(self):
+    #     if self.manual_currency_rate_active:
+    #         if self.currency_id == self.company_id.currency_id:
+    #             self.manual_currency_rate_active = False
+    #             raise UserError(
+    #                 _('Company currency and invoice currency same, You can not add manual Exchange rate for same currency.'))
 
     
     def _compute_payments_widget_to_reconcile_info(self):
