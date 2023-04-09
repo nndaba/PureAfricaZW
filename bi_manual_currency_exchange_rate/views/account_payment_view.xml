@@ -7,8 +7,8 @@
             <field name="inherit_id" ref="account.view_account_payment_register_form"/>
             <field name="arch" type="xml">
             	<xpath expr="//group[@name='group2']" position="inside">
-                    <field name="manual_currency_rate_active"/>
-            		<field name="manual_currency_rate" attrs="{'invisible': [('manual_currency_rate_active', '=', False)], 'required':[('manual_currency_rate_active', '=', True)]}"/>
+                    <field name="manual_currency_rate_active" attrs="{'invisible': ['|', ('can_edit_wizard', '=', False), '&amp;', ('can_group_payments', '=', True), ('group_payment', '=', False)]}"/>
+                    <field name="manual_currency_rate" attrs="{'invisible': [('manual_currency_rate_active', '=', False)],'required':[('manual_currency_rate_active', '=', True)]}"/>
                 </xpath>
             </field>
         </record>
