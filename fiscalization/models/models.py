@@ -38,7 +38,8 @@ class account_move(models.Model):
 
     @api.model
     def handle_fiscalize(self, account_info):
-        url = "http://154.119.80.13:3000/revmax/post"
+        #url = "http://154.119.80.13:3000/revmax/post"
+        url = "http://196.27.106.118:3000/pos/post"
 
         headers = {'Content-Type': 'application/json'}
         message = ""
