@@ -53,7 +53,7 @@ class account_move(models.Model):
                     break
 
                 lines = self.env['account.move.line'].search(
-                    [('move_id', '=', invoice.id), ("exclude_from_invoice_tab", "=", False)])
+                    [('move_id', '=', invoice.id)])
 
                 parsed_invoice = {
                     'invoice_id': invoice.id,
