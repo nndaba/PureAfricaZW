@@ -1,0 +1,111 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sh_product_approval
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.1alpha1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-10-10 10:25+0000\n"
+"PO-Revision-Date: 2020-10-10 10:25+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sh_product_approval
+#: model:ir.model.fields.selection,name:sh_product_approval.selection__product_product__state__approved
+msgid "Approved"
+msgstr "得到正式认可的"
+
+#. module: sh_product_approval
+#: model_terms:ir.actions.act_window,help:sh_product_approval.sh_under_approval_product
+msgid "Create a new product variant"
+msgstr "创建一个新的产品变体"
+
+#. module: sh_product_approval
+#: model:ir.model.fields,field_description:sh_product_approval.field_product_product__display_name
+#: model:ir.model.fields,field_description:sh_product_approval.field_product_template__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: sh_product_approval
+#: model:ir.model.fields.selection,name:sh_product_approval.selection__product_product__state__draft
+msgid "Draft"
+msgstr "草案"
+
+#. module: sh_product_approval
+#: model:ir.model.fields,field_description:sh_product_approval.field_product_product__id
+#: model:ir.model.fields,field_description:sh_product_approval.field_product_template__id
+msgid "ID"
+msgstr "ID"
+
+#. module: sh_product_approval
+#: model:ir.model.fields,field_description:sh_product_approval.field_product_product____last_update
+#: model:ir.model.fields,field_description:sh_product_approval.field_product_template____last_update
+msgid "Last Modified on"
+msgstr "最后修改了"
+
+#. module: sh_product_approval
+#: model:ir.actions.server,name:sh_product_approval.sh_product_approve_action
+msgid "Mass Approve"
+msgstr "大众批准"
+
+#. module: sh_product_approval
+#: model:ir.actions.server,name:sh_product_approval.sh_product_not_approve_action
+msgid "Mass Not Approve"
+msgstr "弥撒不赞成"
+
+#. module: sh_product_approval
+#: model:ir.model.fields.selection,name:sh_product_approval.selection__product_product__state__not_approved
+msgid "Not Approved"
+msgstr "不批准"
+
+#. module: sh_product_approval
+#: model:ir.model,name:sh_product_approval.model_product_product
+msgid "Product"
+msgstr "产品"
+
+#. module: sh_product_approval
+#: model:res.groups,name:sh_product_approval.sh_product_approve_manager
+msgid "Product Manager"
+msgstr "产品经理"
+
+#. module: sh_product_approval
+#: model:ir.model,name:sh_product_approval.model_product_template
+msgid "Product Template"
+msgstr "产品模板"
+
+#. module: sh_product_approval
+#: model:ir.model.fields,field_description:sh_product_approval.field_product_product__state
+msgid "State"
+msgstr "状态"
+
+#. module: sh_product_approval
+#: model:ir.model.fields.selection,name:sh_product_approval.selection__product_product__state__under_approval
+msgid "Under Approval"
+msgstr "根据批准"
+
+#. module: sh_product_approval
+#: model:ir.actions.act_window,name:sh_product_approval.sh_under_approval_product
+#: model:ir.ui.menu,name:sh_product_approval.under_approval_product_menu
+msgid "Under Approval Products"
+msgstr "在批准产品下"
+
+#. module: sh_product_approval
+#: code:addons/sh_product_approval/models/sh_product.py:0
+#: code:addons/sh_product_approval/models/sh_product.py:0
+#, python-format
+msgid "You are not Product Manager"
+msgstr "你不是产品经理"
+
+#. module: sh_product_approval
+#: model_terms:ir.actions.act_window,help:sh_product_approval.sh_under_approval_product
+msgid ""
+"You must define a product for everything you sell or purchase, whether it's "
+"a storable product, a consumable or a service."
+msgstr ""
+"无论是什么都是销售或购买的一切，您必须定义产品"
+"可存储的产品，消耗品或服务。"
