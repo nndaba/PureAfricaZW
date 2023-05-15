@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="sh_contact_form_view" model="ir.ui.view">
+        <field name="name">sh.contact.form.view</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//form//sheet[1]" position="before">
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,under_approval,approved,not_approved" options="{'clickable': '1'}" />
+                    <field name="is_first" invisible="1"/> 
+                </header>
+            </xpath>
+        </field>
+    </record>
+    <record id="sh_under_approval_contact" model="ir.actions.act_window">
+        <field name="name">Under Approval Contacts</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,tree,form,activity</field>
+        <field name="domain">[('state','in',['under_approval','not_approved']),('active','=',False)]</field>
+        <field name="context">{}</field>
+        <field name="view_id" ref="base.view_partner_tree" />
+        <field name="search_view_id" ref="base.view_res_partner_filter" />
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Contacts
+            </p>
+        </field>
+    </record>
+    <menuitem id="under_approval_contact_menu" name="Under Approval Contacts" action="sh_under_approval_contact" parent="contacts.menu_contacts" />
+</odoo>
