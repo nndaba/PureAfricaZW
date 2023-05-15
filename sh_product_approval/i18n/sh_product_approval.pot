@@ -1,0 +1,109 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sh_product_approval
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.1alpha1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-10-10 10:25+0000\n"
+"PO-Revision-Date: 2020-10-10 10:25+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sh_product_approval
+#: model:ir.model.fields.selection,name:sh_product_approval.selection__product_product__state__approved
+msgid "Approved"
+msgstr ""
+
+#. module: sh_product_approval
+#: model_terms:ir.actions.act_window,help:sh_product_approval.sh_under_approval_product
+msgid "Create a new product variant"
+msgstr ""
+
+#. module: sh_product_approval
+#: model:ir.model.fields,field_description:sh_product_approval.field_product_product__display_name
+#: model:ir.model.fields,field_description:sh_product_approval.field_product_template__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: sh_product_approval
+#: model:ir.model.fields.selection,name:sh_product_approval.selection__product_product__state__draft
+msgid "Draft"
+msgstr ""
+
+#. module: sh_product_approval
+#: model:ir.model.fields,field_description:sh_product_approval.field_product_product__id
+#: model:ir.model.fields,field_description:sh_product_approval.field_product_template__id
+msgid "ID"
+msgstr ""
+
+#. module: sh_product_approval
+#: model:ir.model.fields,field_description:sh_product_approval.field_product_product____last_update
+#: model:ir.model.fields,field_description:sh_product_approval.field_product_template____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: sh_product_approval
+#: model:ir.actions.server,name:sh_product_approval.sh_product_approve_action
+msgid "Mass Approve"
+msgstr ""
+
+#. module: sh_product_approval
+#: model:ir.actions.server,name:sh_product_approval.sh_product_not_approve_action
+msgid "Mass Not Approve"
+msgstr ""
+
+#. module: sh_product_approval
+#: model:ir.model.fields.selection,name:sh_product_approval.selection__product_product__state__not_approved
+msgid "Not Approved"
+msgstr ""
+
+#. module: sh_product_approval
+#: model:ir.model,name:sh_product_approval.model_product_product
+msgid "Product"
+msgstr ""
+
+#. module: sh_product_approval
+#: model:res.groups,name:sh_product_approval.sh_product_approve_manager
+msgid "Product Manager"
+msgstr ""
+
+#. module: sh_product_approval
+#: model:ir.model,name:sh_product_approval.model_product_template
+msgid "Product Template"
+msgstr ""
+
+#. module: sh_product_approval
+#: model:ir.model.fields,field_description:sh_product_approval.field_product_product__state
+msgid "State"
+msgstr ""
+
+#. module: sh_product_approval
+#: model:ir.model.fields.selection,name:sh_product_approval.selection__product_product__state__under_approval
+msgid "Under Approval"
+msgstr ""
+
+#. module: sh_product_approval
+#: model:ir.actions.act_window,name:sh_product_approval.sh_under_approval_product
+#: model:ir.ui.menu,name:sh_product_approval.under_approval_product_menu
+msgid "Under Approval Products"
+msgstr ""
+
+#. module: sh_product_approval
+#: code:addons/sh_product_approval/models/sh_product.py:0
+#: code:addons/sh_product_approval/models/sh_product.py:0
+#, python-format
+msgid "You are not Product Manager"
+msgstr ""
+
+#. module: sh_product_approval
+#: model_terms:ir.actions.act_window,help:sh_product_approval.sh_under_approval_product
+msgid ""
+"You must define a product for everything you sell or purchase, whether it's "
+"a storable product, a consumable or a service."
+msgstr ""
