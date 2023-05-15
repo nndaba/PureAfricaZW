@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <menuitem id="under_approval_contact_menu" name="Under Approval Contacts" action="sh_under_approval_contact" parent="contacts.menu_contacts" />
+</odoo>
