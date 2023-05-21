@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_automation_workflow_automation_workflow,automation_workflow.automation_workflow,model_automation_workflow_automation_workflow,base.group_user,1,1,1,1
