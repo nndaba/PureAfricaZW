@@ -21,7 +21,7 @@
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//button[@name='301']" position="attributes">
+                <xpath expr="//button[@name='423']" position="attributes">
                     <attribute name="attrs">{'invisible': [('is_import', '=', True)]}</attribute>
                 </xpath>
             </field>
