@@ -1,0 +1,48 @@
+@media only screen and (max-width: 511px) {
+    .pos-receipt-print {
+        width: 350px;
+        font-size: 20px;
+    }
+
+    @media print {
+        .pos .pos-receipt {
+            font-size: 13px !important;
+            width: 176px !important;
+        }
+    }
+}
+
+
+.pos-receipt .table-info {
+    padding-top: 10px;
+    border-bottom: solid;
+}
+
+.pos-receipt .Payment-Lines > div, .pos-receipt .table-info > div {
+    padding-bottom: 5px;
+}
+
+.pos-receipt .order-date {
+    direction: initial;
+    text-transform: uppercase;
+    border-bottom: solid;
+
+}
+
+.pos-receipt .orderlines .mine-table th{
+    padding-top: 15px;
+    padding-bottom: 5px;
+}
+
+.pos-receipt .orderlines .mine-table td{
+    padding-top: 15px;
+    padding-bottom: 5px;
+    border-bottom: 1px dashed;
+}
+
+.pos-receipt .orderlines .mine-table{
+    padding-left: 0 !important;
+    border-bottom: 1px dashed;
+    padding: 5px;
+    width: 100%;
+}

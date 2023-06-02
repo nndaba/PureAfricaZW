@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="LabelReceipt" owl="1">
+        <t t-foreach="compute_product.orderlines_q" t-as="product" t-key="product.id">
+            <t t-foreach="product.quantity_q" t-as="orderlines" t-key="orderlines.id">
+            <div class="pos-receipt">
+            <div style="text-align: center;margin-bottom: 10px;"><t t-esc="receipt.name" /></div>
+            <div class="order-date" style="margin-bottom: 10px;"><t t-esc="receipt.date.LocaleStringdateStyle"/><span t-esc="receipt.date.LocaleStringtimeStyle" class="pos-receipt-right-align"/></div>
+            <t t-if="receipt.partner">
+                <div class="table-info" style="padding-top: 0px !important;margin-bottom: 10px;">
+                    <div> <span>Client Name: </span><span><t t-esc="receipt.partner.name"/></span></div>
+                    <t t-if="receipt.partner.phone">
+                        <div> <span>Client Phone: </span><span><t t-esc="receipt.partner.phone"/></span></div>
+                    </t>
+                </div>
+            </t>
+            <t t-foreach="receipt.orderlines" t-as="orderline" t-key="orderline.id">
+                <t t-if="orderline.id == product.id">
+                    <div style="font-size: 150% !important; display: grid; justify-content: center; margin-bottom: 10px;">
+                        <div class="multiprint-flex">
+                            <span t-esc="orderline.product_name_wrapped[0]"/>
+                        </div>
+                        <t t-foreach="orderline.product_name_wrapped.slice(1)" t-as="wrapped_line" t-key="wrapped_line.id">
+                            <div style="text-align: right">
+                                <span t-esc="wrapped_line"/>
+                            </div>
+                        </t>
+                        <t t-if="orderline.customer_note">
+                            <div>
+                                NOTE
+                                <span class="pos-receipt-right-align">...</span>
+                            </div>
+                            <div><span class="pos-receipt-left-padding">--- <t t-esc="orderline.customer_note" /></span></div>
+                            <br/>
+                        </t>
+                    </div>
+                </t>
+            </t>
+<!--            <br />-->
+<!--            <br />-->
+        </div>
+        </t>
+        </t>
+    </t>
+</templates>
