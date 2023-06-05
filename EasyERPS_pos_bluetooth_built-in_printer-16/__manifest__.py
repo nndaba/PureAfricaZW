@@ -18,9 +18,9 @@
     ],
     'assets': {
         'point_of_sale.assets': [
-            'EasyERPS_pos_bluetooth_built-in_printer/static/src/js/*.js',
-             ('after','point_of_sale/static/src/scss/pos.scss' ,'EasyERPS_pos_bluetooth_built-in_printer/static/src/css/BluetoothPrinterReceiptScreen.css'),
-            'EasyERPS_pos_bluetooth_built-in_printer/static/src/xml/*.xml',
+            'EasyERPS_pos_bluetooth_built-in_printer-16/static/src/js/*.js',
+             ('after','point_of_sale/static/src/scss/pos.scss' ,'EasyERPS_pos_bluetooth_built-in_printer-16/static/src/css/BluetoothPrinterReceiptScreen.css'),
+            'EasyERPS_pos_bluetooth_built-in_printer-16/static/src/xml/*.xml',
         ],
 
     },
