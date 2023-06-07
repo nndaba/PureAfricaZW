@@ -1,0 +1,111 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sh_product_approval
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.1alpha1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-10-10 10:25+0000\n"
+"PO-Revision-Date: 2020-10-10 10:25+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sh_product_approval
+#: model:ir.model.fields.selection,name:sh_product_approval.selection__product_product__state__approved
+msgid "Approved"
+msgstr "Approuvé"
+
+#. module: sh_product_approval
+#: model_terms:ir.actions.act_window,help:sh_product_approval.sh_under_approval_product
+msgid "Create a new product variant"
+msgstr "Créer une nouvelle variante de produit"
+
+#. module: sh_product_approval
+#: model:ir.model.fields,field_description:sh_product_approval.field_product_product__display_name
+#: model:ir.model.fields,field_description:sh_product_approval.field_product_template__display_name
+msgid "Display Name"
+msgstr "Afficher un nom"
+
+#. module: sh_product_approval
+#: model:ir.model.fields.selection,name:sh_product_approval.selection__product_product__state__draft
+msgid "Draft"
+msgstr "Brouillon"
+
+#. module: sh_product_approval
+#: model:ir.model.fields,field_description:sh_product_approval.field_product_product__id
+#: model:ir.model.fields,field_description:sh_product_approval.field_product_template__id
+msgid "ID"
+msgstr "identifiant"
+
+#. module: sh_product_approval
+#: model:ir.model.fields,field_description:sh_product_approval.field_product_product____last_update
+#: model:ir.model.fields,field_description:sh_product_approval.field_product_template____last_update
+msgid "Last Modified on"
+msgstr "Dernière modification sur"
+
+#. module: sh_product_approval
+#: model:ir.actions.server,name:sh_product_approval.sh_product_approve_action
+msgid "Mass Approve"
+msgstr "Masse approuver"
+
+#. module: sh_product_approval
+#: model:ir.actions.server,name:sh_product_approval.sh_product_not_approve_action
+msgid "Mass Not Approve"
+msgstr "Masse pas approuver"
+
+#. module: sh_product_approval
+#: model:ir.model.fields.selection,name:sh_product_approval.selection__product_product__state__not_approved
+msgid "Not Approved"
+msgstr "Non approuvé"
+
+#. module: sh_product_approval
+#: model:ir.model,name:sh_product_approval.model_product_product
+msgid "Product"
+msgstr "Produit"
+
+#. module: sh_product_approval
+#: model:res.groups,name:sh_product_approval.sh_product_approve_manager
+msgid "Product Manager"
+msgstr "Chef de produit"
+
+#. module: sh_product_approval
+#: model:ir.model,name:sh_product_approval.model_product_template
+msgid "Product Template"
+msgstr "Modèle de produit"
+
+#. module: sh_product_approval
+#: model:ir.model.fields,field_description:sh_product_approval.field_product_product__state
+msgid "State"
+msgstr "État"
+
+#. module: sh_product_approval
+#: model:ir.model.fields.selection,name:sh_product_approval.selection__product_product__state__under_approval
+msgid "Under Approval"
+msgstr "Sous l'approbation"
+
+#. module: sh_product_approval
+#: model:ir.actions.act_window,name:sh_product_approval.sh_under_approval_product
+#: model:ir.ui.menu,name:sh_product_approval.under_approval_product_menu
+msgid "Under Approval Products"
+msgstr "Sous Produits d'approbation"
+
+#. module: sh_product_approval
+#: code:addons/sh_product_approval/models/sh_product.py:0
+#: code:addons/sh_product_approval/models/sh_product.py:0
+#, python-format
+msgid "You are not Product Manager"
+msgstr "Vous n'êtes pas responsable de produit"
+
+#. module: sh_product_approval
+#: model_terms:ir.actions.act_window,help:sh_product_approval.sh_under_approval_product
+msgid ""
+"You must define a product for everything you sell or purchase, whether it's "
+"a storable product, a consumable or a service."
+msgstr ""
+"Vous devez définir un produit pour tout ce que vous vendez ou achetez, que ce soit"
+"un produit stockable, un consommable ou un service."

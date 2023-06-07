@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="sh_product_form_view" model="ir.ui.view">
+        <field name="name">sh.product.form.view</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//form//header" position="inside">
+                <field name="state" widget="statusbar" statusbar_visible="draft,under_approval,approved,not_approved" clickable="True" />
+            </xpath>
+        </field>
+    </record>
+    <record id="sh_product_approve_action" model="ir.actions.server">
+        <field name="name">Mass Approve</field>
+        <field name="type">ir.actions.server</field>
+        <field name="state">code</field>
+        <field name="model_id" ref="product.model_product_product" />
+        <field name="binding_model_id" ref="product.model_product_product" />
+        <field name="code">
+            records.approve_product()
+        </field>
+    </record>
+    <record id="sh_product_not_approve_action" model="ir.actions.server">
+        <field name="name">Mass Not Approve</field>
+        <field name="type">ir.actions.server</field>
+        <field name="state">code</field>
+        <field name="model_id" ref="product.model_product_product" />
+        <field name="binding_model_id" ref="product.model_product_product" />
+        <field name="code">
+            records.not_approve_product()
+        </field>
+    </record>
+    <record id="sh_under_approval_product" model="ir.actions.act_window">
+        <field name="name">Under Approval Products</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.product</field>
+        <field name="view_mode">tree,form,kanban,activity</field>
+        <field name="domain">[('state','in',['under_approval','not_approved']),('active','=',False)]</field>
+        <field name="search_view_id" ref="product.product_search_form_view" />
+        <field name="view_id" eval="False" />
+        <!-- Force empty -->
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new product variant
+            </p>
+            <p>
+                You must define a product for everything you sell or purchase, whether it's a storable product, a consumable or a service.
+            </p>
+        </field>
+    </record>
+    <menuitem id="under_approval_product_menu" name="Under Approval Products" action="sh_under_approval_product" parent="sale.product_menu_catalog" />
+</odoo>

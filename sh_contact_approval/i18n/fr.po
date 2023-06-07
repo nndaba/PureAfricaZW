@@ -1,0 +1,87 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sh_contact_approval
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.1alpha1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-10-05 10:51+0000\n"
+"PO-Revision-Date: 2020-10-05 10:51+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sh_contact_approval
+#: model:ir.model.fields.selection,name:sh_contact_approval.selection__res_partner__state__approved
+msgid "Approved"
+msgstr "Approuvée"
+
+#. module: sh_contact_approval
+#: model:ir.model,name:sh_contact_approval.model_res_partner
+msgid "Contact"
+msgstr "Contact"
+
+#. module: sh_contact_approval
+#: model:res.groups,name:sh_contact_approval.sh_contact_approve_manager
+msgid "Contact Manager"
+msgstr "Gestionnaire de contacts"
+
+#. module: sh_contact_approval
+#: model_terms:ir.actions.act_window,help:sh_contact_approval.sh_under_approval_contact
+msgid "Create a new Contacts"
+msgstr "Créer un nouveau contact"
+
+#. module: sh_contact_approval
+#: model:ir.model.fields,field_description:sh_contact_approval.field_res_partner__display_name
+msgid "Display Name"
+msgstr "Afficher un nom"
+
+#. module: sh_contact_approval
+#: model:ir.model.fields.selection,name:sh_contact_approval.selection__res_partner__state__draft
+msgid "Draft"
+msgstr "Brouillon"
+
+#. module: sh_contact_approval
+#: model:ir.model.fields,field_description:sh_contact_approval.field_res_partner__id
+msgid "ID"
+msgstr "ID"
+
+#. module: sh_contact_approval
+#: model:ir.model.fields,field_description:sh_contact_approval.field_res_partner____last_update
+msgid "Last Modified on"
+msgstr "Dernière modification le"
+
+#. module: sh_contact_approval
+#: model:ir.actions.server,name:sh_contact_approval.sh_contact_approve_action
+msgid "Mass Approve"
+msgstr "Approuver en masse"
+
+#. module: sh_contact_approval
+#: model:ir.actions.server,name:sh_contact_approval.sh_product_not_approve_action
+msgid "Mass Not Approve"
+msgstr "Masse non approuvée"
+
+#. module: sh_contact_approval
+#: model:ir.model.fields.selection,name:sh_contact_approval.selection__res_partner__state__not_approved
+msgid "Not Approved"
+msgstr "Non approuvé"
+
+#. module: sh_contact_approval
+#: model:ir.model.fields,field_description:sh_contact_approval.field_res_partner__state
+msgid "Status"
+msgstr "Statut"
+
+#. module: sh_contact_approval
+#: model:ir.model.fields.selection,name:sh_contact_approval.selection__res_partner__state__under_approval
+msgid "Under Approval"
+msgstr "En cours d'approbation"
+
+#. module: sh_contact_approval
+#: model:ir.actions.act_window,name:sh_contact_approval.sh_under_approval_contact
+#: model:ir.ui.menu,name:sh_contact_approval.under_approval_contact_menu
+msgid "Under Approval Contacts"
+msgstr "Sous Contacts d'approbation"

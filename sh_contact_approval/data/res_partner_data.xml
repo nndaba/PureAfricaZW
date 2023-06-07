@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="sh_contact_approve_action" model="ir.actions.server">
+        <field name="name">Mass Approve</field>
+        <field name="type">ir.actions.server</field>
+        <field name="state">code</field>
+        <field name="model_id" ref="base.model_res_partner" />
+        <field name="binding_model_id" ref="base.model_res_partner" />
+        <field name="code">
+            records.approve_contact()
+        </field>
+    </record>
+    <record id="sh_product_not_approve_action" model="ir.actions.server">
+        <field name="name">Mass Not Approve</field>
+        <field name="type">ir.actions.server</field>
+        <field name="state">code</field>
+        <field name="model_id" ref="base.model_res_partner" />
+        <field name="binding_model_id" ref="base.model_res_partner" />
+        <field name="code">
+            records.not_approve_contact()
+        </field>
+    </record>
+</odoo>

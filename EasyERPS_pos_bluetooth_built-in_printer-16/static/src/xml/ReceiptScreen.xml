@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+<t t-name="ReceiptScreen" t-inherit="point_of_sale.ReceiptScreen" t-inherit-mode="extension" owl="1">
+    <xpath expr="//div[hasclass('buttons')]" position="after">
+        <div class="buttons" style="display: block !important;">
+            <t t-if="env.pos.config.pos_bluetooth_printer">
+                <t t-if="env.pos.config.receipt_types_views == 'categoryReceipt' and env.pos.pos_categ_id or env.pos.config.receipt_types_views == 'labelReceipt'">
+                     <div class="button print" style="margin: inherit;" t-on-click="printReceiptAndLabel">
+                        <i class="fa fa-print"></i> Print Receipt and Category/Label
+                    </div>
+                    <div class="button print" style="margin: inherit;" t-on-click="printLabel">
+                        <i class="fa fa-print"></i> Print Category/Label
+                    </div>
+                </t>
+            </t>
+        </div>
+    </xpath>
+
+
+    <xpath expr="//div[hasclass('pos-receipt-container')]" position="inside">
+        <t t-if="env.pos.config.pos_bluetooth_printer">
+            <t t-if="env.pos.config.receipt_types_views == 'labelReceipt'">
+                <LabelReceipt order="currentOrder"/>
+            </t>
+            <t t-if="env.pos.config.receipt_types_views == 'categoryReceipt' and env.pos.pos_categ_id">
+                <CategoryReceipt order="currentOrder" />
+            </t>
+        </t>
+    </xpath>
+</t>
+
+<t t-name="OrderReceipt" t-inherit="point_of_sale.OrderReceipt" t-inherit-mode="extension" owl="1">
+    <xpath expr="//div[hasclass('pos-receipt-order-data')]" position="after">
+        <t t-if="env.pos.config.pos_bluetooth_printer">
+        <br />
+        <br />
+        </t>
+    </xpath>
+</t>
+
+<t t-name="SaleDetailsReport" t-inherit="point_of_sale.SaleDetailsReport" t-inherit-mode="extension" owl="1">
+    <xpath expr="//div[hasclass('pos-receipt-order-data')]" position="after">
+        <t t-if="pos.config.pos_bluetooth_printer">
+        <br />
+        <br />
+        </t>
+    </xpath>
+</t>
+
+</templates>
