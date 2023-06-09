@@ -54,5 +54,11 @@ class PurchaserOrderExtended(models.Model):
     _inherit = 'purchase.order'
 
     is_import = fields.Boolean(default=False)
+    
+    @api.model
+    def create(self, vals):
+        _logger.info(vals)
+        return super(AccountMoveExtended, self).create(vals)
+
 
 
