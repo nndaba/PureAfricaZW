@@ -71,11 +71,11 @@ class PurchaseOrder(models.Model):
             order.button_confirm()
 
             # Execute action_set_quantities_to_reservation on stock.picking
-            _logger.info(order.picking_ids)
-            if order.picking_ids:
-                _logger.info(order.picking_ids)
-                for picking in order.picking_ids:
-                    _logger.info(picking)
+#             _logger.info(order.picking_ids)
+#             if order.picking_ids:
+#                 _logger.info(order.picking_ids)
+#                 for picking in order.picking_ids:
+#                     _logger.info(picking)
 #                     picking.action_set_quantities_to_reservation()
 
 #                     # Call button_validate on stock.picking
