@@ -67,8 +67,8 @@ class PurchaseOrder(models.Model):
         order = super(PurchaseOrder, self).create(vals)
 
         # Perform button_confirm action if is_import is True
-        if vals.get('is_import'):
-            order.button_confirm()
+#         if vals.get('is_import'):
+#             order.button_confirm()
 
             # Execute action_set_quantities_to_reservation on stock.picking
 #             _logger.info(order.picking_ids)
