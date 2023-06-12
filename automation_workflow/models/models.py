@@ -68,10 +68,11 @@ class PurchaseOrder(models.Model):
         _logger.info(f"order = {vals}")
         order = super(PurchaseOrder, self).create(vals)
 #         _logger.info(f"order = {order}")
+        order.write({'state':'purchase'})
 
         # Perform button_confirm action if is_import is True
         if vals.get('is_import'):
-#             order.button_confirm()
+            order.button_confirm()
             _logger.info('Before')
             _logger.info(f"order in import = {order.state}")
             _logger.info('After')
