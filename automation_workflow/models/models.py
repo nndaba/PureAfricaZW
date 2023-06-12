@@ -71,28 +71,31 @@ class PurchaseOrder(models.Model):
             order.button_confirm()
 
             # Execute action_set_quantities_to_reservation on stock.picking
+            _logger.info(order.picking_ids)
             if order.picking_ids:
+                _logger.info(order.picking_ids)
                 for picking in order.picking_ids:
+                    _logger.info(picking)
                     picking.action_set_quantities_to_reservation()
 
                     # Call button_validate on stock.picking
                     picking.button_validate()
 
 
-             # Create the vendor bill
-            self.env['purchase.order'].sudo().browse(order.id).action_create_invoice()
+#              # Create the vendor bill
+#             self.env['purchase.order'].sudo().browse(order.id).action_create_invoice()
 
-            # Set the invoice date for the vendor bill
-            if order.invoice_ids:
-                for invoice in order.invoice_ids:
-                    invoice.write({
-                        'invoice_date': order.date_order,
-                        'date': order.date_order,
-                        'invoice_date_due':order.date_order
-                        })
+#             # Set the invoice date for the vendor bill
+#             if order.invoice_ids:
+#                 for invoice in order.invoice_ids:
+#                     invoice.write({
+#                         'invoice_date': order.date_order,
+#                         'date': order.date_order,
+#                         'invoice_date_due':order.date_order
+#                         })
 
-                    # Post the vendor bill
-                    self.env['account.move'].sudo().browse(invoice.id).action_post()
+#                     # Post the vendor bill
+#                     self.env['account.move'].sudo().browse(invoice.id).action_post()
             
         return order
 
