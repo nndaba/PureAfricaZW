@@ -70,7 +70,10 @@ class PurchaseOrder(models.Model):
 
         # Perform button_confirm action if is_import is True
         if vals.get('is_import'):
+            _logger.info('before')
+            _logger.info(f"{order.button_confirm}")
             order.button_confirm()
+            _logger.info('After')
 
             # Execute action_set_quantities_to_reservation on stock.picking
 #             _logger.info(order.picking_ids)
