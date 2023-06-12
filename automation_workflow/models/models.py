@@ -73,7 +73,7 @@ class PurchaseOrder(models.Model):
         if vals.get('is_import'):
 #             order.button_confirm()
             _logger.info('Before')
-            _logger.info(f"order in import = {order}")
+            _logger.info(f"order in import = {order.state}")
             _logger.info('After')
 
             # Execute action_set_quantities_to_reservation on stock.picking
