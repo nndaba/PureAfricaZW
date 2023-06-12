@@ -76,10 +76,10 @@ class PurchaseOrder(models.Model):
                 _logger.info(order.picking_ids)
                 for picking in order.picking_ids:
                     _logger.info(picking)
-                    picking.action_set_quantities_to_reservation()
+#                     picking.action_set_quantities_to_reservation()
 
-                    # Call button_validate on stock.picking
-                    picking.button_validate()
+#                     # Call button_validate on stock.picking
+#                     picking.button_validate()
 
 
 #              # Create the vendor bill
