@@ -58,22 +58,22 @@ class PurchaseOrder(models.Model):
 
     is_import = fields.Boolean(default=False)
 
-    @api.model
-    def create(self, vals):
-        # Set the date_order from the sheet if is_import is True
-        if vals.get('is_import'):
-            date_order = vals.get('date_order')
-            vals['date_order'] = date_order  # Set the date_order field in the vals dictionary
+#     @api.model
+#     def create(self, vals):
+#         # Set the date_order from the sheet if is_import is True
+#         if vals.get('is_import'):
+#             date_order = vals.get('date_order')
+#             vals['date_order'] = date_order  # Set the date_order field in the vals dictionary
 
 
-        order = super(PurchaseOrder, self).create(vals)
+#         order = super(PurchaseOrder, self).create(vals)
 
-        # Perform button_confirm action if is_import is True
-        if vals.get('is_import'):
-            _logger.info('before')
-#             _logger.info(f"{order.button_confirm}")
-            order.button_confirm()
-            _logger.info('After')
+#         # Perform button_confirm action if is_import is True
+#         if vals.get('is_import'):
+#             _logger.info('before')
+# #             _logger.info(f"{order.button_confirm}")
+#             order.button_confirm()
+#             _logger.info('After')
 
             # Execute action_set_quantities_to_reservation on stock.picking
 #             _logger.info(order.picking_ids)
@@ -102,6 +102,6 @@ class PurchaseOrder(models.Model):
 #                     # Post the vendor bill
 #                     self.env['account.move'].sudo().browse(invoice.id).action_post()
             
-        return order
+#         return order
 
 
