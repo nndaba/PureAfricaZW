@@ -62,9 +62,9 @@ class PurchaseOrder(models.Model):
     def create(self, vals):
         # Set the date_order from the sheet if is_import is True
 #         _logger.info(vals)
-#         if vals.get('is_import'):
-#             _logger.info(vals.get('is_import'))
-# #             date_order = vals.get('date_order')
+        if vals.get('is_import'):
+            _logger.info(vals.get('is_import'))
+            date_order = vals.get('date_order')
 
         order = super(PurchaseOrder, self).create(vals)
 
