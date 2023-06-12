@@ -65,17 +65,17 @@ class PurchaseOrder(models.Model):
             date_order = vals.get('date_order')
             vals['date_order'] = date_order  # Set the date_order field in the vals dictionary
 
-        _logger.info(f"order = {vals}")
+#         _logger.info(f"order = {vals}")
         order = super(PurchaseOrder, self).create(vals)
 #         _logger.info(f"order = {order}")
-        order.write({'state':'purchase'})
+#         order.write({'state':'purchase'})
 
         # Perform button_confirm action if is_import is True
         if vals.get('is_import'):
             order.button_confirm()
-            _logger.info('Before')
-            _logger.info(f"order in import = {order.state}")
-            _logger.info('After')
+#             _logger.info('Before')
+#             _logger.info(f"order in import = {order.state}")
+#             _logger.info('After')
 
             # Execute action_set_quantities_to_reservation on stock.picking
 #             _logger.info(order.picking_ids)
