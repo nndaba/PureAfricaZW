@@ -65,7 +65,7 @@ class PurchaseOrder(models.Model):
             date_order = vals.get('date_order')
             vals['date_order'] = date_order  # Set the date_order field in the vals dictionary
 
-
+        _logger.info(f"order = {vals}")
         order = super(PurchaseOrder, self).create(vals)
         _logger.info(f"order = {order}")
 
