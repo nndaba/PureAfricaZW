@@ -1,32 +1,5 @@
 <odoo>
   <data>
-       
-        <record id="view_sale_order_form" model="ir.ui.view">
-            <field name="name">sale.order.form.inherit</field>
-            <field name="model">sale.order</field>
-            <field name="inherit_id" ref="sale.view_order_form"/>
-            <field name="arch" type="xml">
-                <div name="button_box" position="inside">
-                    <field name="is_import" invisible="0" />
-                    <button class="oe_stat_button" type="object" name="view_invoice" icon="fa-edit" attrs="{'invisible': [('is_import', '=', False)]}" >
-                        <field string="Invoices" name="imported_invoice_count" widget="statinfo"/>
-                    </button>
-                    
-               </div>
-            </field>
-        </record>
-
-<!--         <record id="view_sale_order_form_inherit" model="ir.ui.view">
-            <field name="name">sale.order.form.inherit</field>
-            <field name="model">sale.order</field>
-            <field name="inherit_id" ref="sale.view_order_form"/>
-            <field name="arch" type="xml">
-                <xpath expr="//button[@name='423']" position="attributes">
-                    <attribute name="attrs">{'invisible': [('is_import', '=', True)]}</attribute>
-                </xpath>
-            </field>
-        </record>
- -->
-   
+     
   </data>
 </odoo>
