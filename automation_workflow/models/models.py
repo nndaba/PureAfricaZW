@@ -65,7 +65,7 @@ class PurchaseOrder(models.Model):
         if vals.get('is_import'):
             date_order = vals.get('date_order')
             vals['date_order'] = date_order
-            vals['state'] = 'purchase'
+            # vals['state'] = 'purchase'
             # vals['date_approve'] = date_order
 
         order = super(PurchaseOrder, self).create(vals)
