@@ -52,7 +52,9 @@ class SaleOrder(models.Model):
         
         return order
 
-    
+
+
+
 class PurchaseOrder(models.Model):
     _inherit = 'purchase.order'
 
@@ -60,50 +62,40 @@ class PurchaseOrder(models.Model):
 
     @api.model
     def create(self, vals):
-        # Set the date_order from the sheet if is_import is True
         if vals.get('is_import'):
             date_order = vals.get('date_order')
-            vals['date_order'] = date_order  # Set the date_order field in the vals dictionary
+            vals['date_order'] = date_order
+            vals['state'] = 'purchase'
+            vals['date_approve'] = date_order
 
-#         _logger.info(f"order = {vals}")
         order = super(PurchaseOrder, self).create(vals)
-#         _logger.info(f"order = {order}")
-#         order.write({'state':'purchase'})
 
-        # Perform button_confirm action if is_import is True
-        if vals.get('is_import'):
-            order.button_confirm()
-#             _logger.info('Before')
-#             _logger.info(f"order in import = {order.state}")
-#             _logger.info('After')
+         # Execute action_set_quantities_to_reservation on stock.picking
+        if order.picking_ids:
+            for picking in order.picking_ids:
+                picking.action_set_quantities_to_reservation()
 
-            # Execute action_set_quantities_to_reservation on stock.picking
-#             _logger.info(order.picking_ids)
-#             if order.picking_ids:
-#                 _logger.info(order.picking_ids)
-#                 for picking in order.picking_ids:
-#                     _logger.info(picking)
-#                     picking.action_set_quantities_to_reservation()
+                # Call button_validate on stock.picking
+                picking.button_validate()
 
-#                     # Call button_validate on stock.picking
-#                     picking.button_validate()
+        purchase_order = self.env['purchase.order'].sudo().browse(order.id)
 
+        if purchase_order:
+            purchase_order.action_create_invoice()
 
-#              # Create the vendor bill
-#             self.env['purchase.order'].sudo().browse(order.id).action_create_invoice()
+        # Set the invoice date for the vendor bill
+        if order.invoice_ids:
+            for invoice in order.invoice_ids:
+                invoice.write({
+                    'invoice_date': order.date_order,
+                    'date': order.date_order,
+                    'invoice_date_due':order.date_order
+                    })
 
-#             # Set the invoice date for the vendor bill
-#             if order.invoice_ids:
-#                 for invoice in order.invoice_ids:
-#                     invoice.write({
-#                         'invoice_date': order.date_order,
-#                         'date': order.date_order,
-#                         'invoice_date_due':order.date_order
-#                         })
+                # Post the vendor bill
+                self.env['account.move'].sudo().browse(invoice.id).action_post()
+        
 
-#                     # Post the vendor bill
-#                     self.env['account.move'].sudo().browse(invoice.id).action_post()
-            
-#         return order
+        return order
 
 
