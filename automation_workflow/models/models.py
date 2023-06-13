@@ -78,10 +78,10 @@ class PurchaseOrder(models.Model):
         #         # Call button_validate on stock.picking
         #         picking.button_validate()
 
-        purchase_order = self.env['purchase.order'].sudo().browse(order.id)
+        # purchase_order = self.env['purchase.order'].sudo().browse(order.id)
 
-        if purchase_order:
-            purchase_order.action_create_invoice()
+        # if purchase_order:
+        #     purchase_order.action_create_invoice()
 
         # Set the invoice date for the vendor bill
         # if order.invoice_ids:
