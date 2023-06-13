@@ -71,12 +71,12 @@ class PurchaseOrder(models.Model):
         order = super(PurchaseOrder, self).create(vals)
 
          # Execute action_set_quantities_to_reservation on stock.picking
-        if order.picking_ids:
-            for picking in order.picking_ids:
-                picking.action_set_quantities_to_reservation()
+        # if order.picking_ids:
+        #     for picking in order.picking_ids:
+        #         picking.action_set_quantities_to_reservation()
 
-                # Call button_validate on stock.picking
-                picking.button_validate()
+        #         # Call button_validate on stock.picking
+        #         picking.button_validate()
 
         purchase_order = self.env['purchase.order'].sudo().browse(order.id)
 
