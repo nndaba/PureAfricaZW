@@ -84,16 +84,16 @@ class PurchaseOrder(models.Model):
             purchase_order.action_create_invoice()
 
         # Set the invoice date for the vendor bill
-        if order.invoice_ids:
-            for invoice in order.invoice_ids:
-                invoice.write({
-                    'invoice_date': order.date_order,
-                    'date': order.date_order,
-                    'invoice_date_due':order.date_order
-                    })
+        # if order.invoice_ids:
+        #     for invoice in order.invoice_ids:
+        #         invoice.write({
+        #             'invoice_date': order.date_order,
+        #             'date': order.date_order,
+        #             'invoice_date_due':order.date_order
+        #             })
 
-                # Post the vendor bill
-                self.env['account.move'].sudo().browse(invoice.id).action_post()
+        #         # Post the vendor bill
+        #         self.env['account.move'].sudo().browse(invoice.id).action_post()
         
 
         return order
