@@ -69,6 +69,7 @@ class PurchaseOrder(models.Model):
             # vals['date_approve'] = date_order
 
         order = super(PurchaseOrder, self).create(vals)
+        order.write({'state':'purchase'})
 
          # Execute action_set_quantities_to_reservation on stock.picking
         # if order.picking_ids:
