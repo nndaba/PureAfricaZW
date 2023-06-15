@@ -59,44 +59,112 @@ class PurchaseOrder(models.Model):
     _inherit = 'purchase.order'
 
     is_import = fields.Boolean(default=False)
+    receipt_count = fields.Integer(compute='_compute_receipt_count', string='Receipt Count')
 
+    def receipt_count(self):
+        self.receipt_count = 1
+        # for order in self:
+            # order.receipt_count = self.env['stock.picking'].search_count([('purchase_id', '=', order.id)])
+
+
+    def view_receipt(self):
+        _logger.info(self.name)
+        if self.is_import:
+            action = {
+                'name': _('Receipts'),
+                'domain': [
+                    ('origin', '=', self.name),
+                    ('state', '!=', 'cancel'),
+                ],
+                'view_type': 'form',
+                'res_model': 'stock.picking',
+                'view_id': False,
+                'view_mode': 'tree,form',
+                'type': 'ir.actions.act_window',
+            }
+            _logger.info(action)
+
+            return action
+
+            
     @api.model
     def create(self, vals):
         if vals.get('is_import'):
             date_order = vals.get('date_order')
             vals['date_order'] = date_order
-            vals['state'] = 'purchase'
-            # vals['date_approve'] = date_order
+          
 
-        order = super(PurchaseOrder, self).create(vals)
-        # order.write({'state':'purchase'})
+            order = super(PurchaseOrder, self).create(vals)
 
-         # Execute action_set_quantities_to_reservation on stock.picking
-        # if order.picking_ids:
-        #     for picking in order.picking_ids:
-        #         picking.action_set_quantities_to_reservation()
+            order.write({
+                'state':'purchase',
+                'date_approve': date_order
+                })
 
-        #         # Call button_validate on stock.picking
-        #         picking.button_validate()
+            self.env['stock.picking'].create_stock_picking(order)
 
-        # purchase_order = self.env['purchase.order'].sudo().browse(order.id)
-
-        # if purchase_order:
-        #     purchase_order.action_create_invoice()
-
-        # Set the invoice date for the vendor bill
-        # if order.invoice_ids:
-        #     for invoice in order.invoice_ids:
-        #         invoice.write({
-        #             'invoice_date': order.date_order,
-        #             'date': order.date_order,
-        #             'invoice_date_due':order.date_order
-        #             })
-
-        #         # Post the vendor bill
-        #         self.env['account.move'].sudo().browse(invoice.id).action_post()
-        
+        else:
+            order = super(PurchaseOrder, self).create(vals)
 
         return order
 
 
+class StockPicking(models.Model):
+    _inherit = 'stock.picking'
+
+ 
+
+    @api.model
+    def create_stock_picking(self, order):
+        StockMove = self.env['stock.move']
+        subtype_id = self.env['mail.message.subtype'].search([('name', '=', 'Note')], limit=1).id
+       
+        picking_type_id = order.picking_type_id
+        location_id  = order.picking_type_id.default_location_dest_id.location_id
+        location_dest_id = order.picking_type_id.default_location_dest_id
+
+        picking_vals = {
+            'partner_id': order.partner_id.id,
+            'location_dest_id': order.partner_id.property_stock_supplier.id,
+            'location_id': location_id.id,
+            'picking_type_id': picking_type_id.id,
+            'scheduled_date': order.date_order,
+            'date_deadline': order.date_order,
+            'origin': order.name
+        }
+        picking = self.create(picking_vals)
+
+        purchase_order_url = self.get_purchase_order_url(order.id)
+
+        note = "This transfer has been created from: <a href='{}'>{}</a> ({})".format(
+            purchase_order_url,
+            order.name,
+            order.partner_ref
+        )
+        picking.message_post(body=note)
+
+        for line in order.order_line:
+            move_vals = {
+                'name': line.product_id.name,
+                'product_id': line.product_id.id,
+                'product_uom_qty': line.product_qty,
+                'picking_id': picking.id,
+                'location_id': line.product_id.property_stock_inventory.location_id.id,
+                'location_dest_id': location_dest_id.id
+            
+            }
+            StockMove.create(move_vals)
+
+       
+
+        return True
+
+
+    def get_purchase_order_url(self, order_id):
+        base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+        order = self.env['purchase.order'].search([('id', '=', order_id)], limit=1)
+
+        model = 'purchase.order'
+        purchase_order_url = f"{base_url}/web#id={order.id}&model={model}&view_type=form"
+
+        return purchase_order_url
