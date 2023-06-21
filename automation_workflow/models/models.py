@@ -156,7 +156,7 @@ class StockPicking(models.Model):
             StockMove.create(move_vals)
             
 
-            picking.action_assign()  # Set the state to 'assigned'
+        picking.write({'state':'assigned'})
         
 
         return True
