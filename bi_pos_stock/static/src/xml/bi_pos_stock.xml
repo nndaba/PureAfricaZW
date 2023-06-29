@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="bi_pos_stock_template" inherit_id="point_of_sale.template" xml:space="preserve">
+	<t t-name="SyncStock" owl="1">
+		<div class="oe_status">
+			<span class="pos-stock-sync" style="padding-right: 30px;" t-on-click="pos_stock_sync">
+				Sync
+				<i class="fa fa-refresh "
+				   style='font-size: 28px;position: absolute;margin-left: 1%;color: #5db937;'/>
+			</span>
+		</div>
+	</t>
+
+    <t t-name="Chrome" t-inherit="point_of_sale.Chrome" t-inherit-mode="extension" owl="1">
+		<xpath expr="//div[hasclass('status-buttons')]" position="before">
+			<SyncStock t-if="is_stock_sync"/>
+		</xpath>
+	</t>
+
+    <t t-name="ProductItem" t-inherit="point_of_sale.ProductItem" t-inherit-mode="extension" owl="1">
+		<xpath expr="//div[hasclass('product-img')]" position="inside">
+			<t t-if="env.pos.config.pos_display_stock">
+				<t t-if="env.pos.config.pos_stock_type == 'onhand'">
+					<t t-if="props.product.bi_on_hand > 0">
+						<span class="qty-label" id="stockqty" >
+							<t t-esc="env.pos.format_currency_no_symbol(props.product.bi_on_hand)"/>
+						</span>
+					</t>
+					<t t-else="">
+						<span class=" qty-label out-of-stock-qty" >
+							<t t-esc="env.pos.format_currency_no_symbol(props.product.bi_on_hand)"/>
+						</span>
+					</t>
+				</t>
+                <t t-if="env.pos.config.pos_stock_type == 'incoming'">
+					<t t-if="props.product.incoming_qty > 0">
+						<span class=" qty-label" >
+							<t t-esc="env.pos.format_currency_no_symbol(props.product.incoming_qty)"/>
+						</span>
+					</t>
+					<t t-else="">
+						<span class="qty-label out-of-stock-qty">
+							<t t-esc="env.pos.format_currency_no_symbol(props.product.incoming_qty)"/>
+						</span>
+					</t>
+				</t>
+                <t t-if="env.pos.config.pos_stock_type == 'outgoing'">
+					<t t-if="props.product.outgoing_qty > 0">
+						<span class="qty-label" >
+							<t t-esc="env.pos.format_currency_no_symbol(props.product.outgoing_qty)"/>
+						</span>
+					</t>
+					<t t-else="">
+						<span class="qty-label out-of-stock-qty">
+							<t t-esc="env.pos.format_currency_no_symbol(props.product.outgoing_qty)"/>
+						</span>
+					</t>
+				</t>
+                <t t-if="env.pos.config.pos_stock_type == 'available'">
+						<t t-if="props.product.bi_available > 0">
+							<span class=" qty-label" id="availqty">
+								<t t-esc="env.pos.format_currency_no_symbol(props.product.bi_available)"/>
+							</span>
+						</t>
+						<t t-else="">
+							<span class="qty-label out-of-stock-qty" id="availqty">
+								<t t-esc="env.pos.format_currency_no_symbol(props.product.bi_available)"/>
+							</span>
+						</t>
+				</t>
+			</t>
+		</xpath>
+	</t> 
+		
+</templates>
+	
+	
