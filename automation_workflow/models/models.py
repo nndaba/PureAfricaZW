@@ -194,7 +194,13 @@ class StockPicking(models.Model):
             
         elif isinstance(order, SaleOrder):
             model = 'sale.order'
-            picking_type_id =  self.env['stock.picking.type'].search([('barcode', '=', 'PURE-DELIVERY')], limit=1).id
+            
+            if order.company_id.id == 1:
+                picking_type_id =  self.env['stock.picking.type'].search([('barcode', '=', 'ALL-DELIVERY')], limit=1).id
+            else:
+                picking_type_id =  self.env['stock.picking.type'].search([('barcode', '=', 'PURE-DELIVERY')], limit=1).id
+            
+            
            
             picking_vals = {
                 'partner_id': order.partner_id.id,
