@@ -258,6 +258,7 @@ class AccountMove(models.Model):
                 'move_type': 'in_invoice',
                 'partner_id': order.partner_id.id,
                 'invoice_date': order.date_order,
+                'date' : order.date_order,
                 'company_id': order.company_id.id,
                 'currency_id': order.currency_id.id,
                 'invoice_origin': order.name,
