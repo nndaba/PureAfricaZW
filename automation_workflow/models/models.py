@@ -11,6 +11,7 @@ class SaleOrder(models.Model):
 
     is_import = fields.Boolean(default=False)
     
+    
     def view_sale_receipt(self):
         _logger.info(self.name)
         if self.is_import:
@@ -53,6 +54,13 @@ class SaleOrder(models.Model):
     def create(self, vals):
         # Set the date_order from the sheet if is_import is True
         if vals.get('is_import'):
+            
+            order_lines = vals.get('order_line')
+                        
+            for line_command, line_id, line_vals in order_lines:
+                if line_vals.get('product_uom_qty'):
+                    line_vals['qty_delivered'] = line_vals['product_uom_qty']
+                    line_vals['qty_invoiced'] = line_vals['product_uom_qty']
 
             order = super(SaleOrder, self).create(vals)
             order.write({
@@ -135,8 +143,24 @@ class PurchaseOrder(models.Model):
             date_order = vals.get('date_order')
             vals['date_order'] = date_order
             
+            order_lines = vals.get('order_line')
+                        
+            for line_command, line_id, line_vals in order_lines:
+                if line_vals.get('product_qty'):
+                    line_vals['qty_received'] = line_vals['product_qty']
+                    line_vals['qty_invoiced'] = line_vals['product_qty']   #n/i
+            
             order = super(PurchaseOrder, self).create(vals)
-
+            
+            for line in order.order_line:
+                line.write({
+                    'qty_invoiced': line.product_qty,
+                })
+                _logger.info(34*'$')
+                _logger.info(f"Writing to order line {line.id}: {line_vals}")
+                _logger.info(34*'$')
+                line.write(line_vals)
+            
             order.write({
                 'state':'purchase',
                 'date_approve': date_order
@@ -185,6 +209,7 @@ class StockPicking(models.Model):
                     'name': line.product_id.name,
                     'product_id': line.product_id.id,
                     'product_uom_qty': line.product_qty,
+                    'quantity_done' : line.product_qty,
                     'picking_id': picking.id,
                     'location_id': line.product_id.property_stock_inventory.location_id.id,
                     'location_dest_id': location_dest_id.id
@@ -194,13 +219,7 @@ class StockPicking(models.Model):
             
         elif isinstance(order, SaleOrder):
             model = 'sale.order'
-            
-            if order.company_id.id == 1:
-                picking_type_id =  self.env['stock.picking.type'].search([('barcode', '=', 'ALL-DELIVERY')], limit=1).id
-            else:
-                picking_type_id =  self.env['stock.picking.type'].search([('barcode', '=', 'PURE-DELIVERY')], limit=1).id
-            
-            
+            picking_type_id =  self.env['stock.picking.type'].search([('barcode', '=', 'WH-DELIVERY')], limit=1).id
            
             picking_vals = {
                 'partner_id': order.partner_id.id,
@@ -225,6 +244,7 @@ class StockPicking(models.Model):
                     'name': line.product_id.name,
                     'product_id': line.product_id.id,
                     'product_uom_qty': line.product_uom_qty,
+                    'quantity_done' : line.product_uom_qty,
                     'picking_id': picking.id,
                     'location_id': line.product_id.property_stock_inventory.location_id.id,
                     'location_dest_id': order.partner_id.property_stock_customer.id,
@@ -264,7 +284,7 @@ class AccountMove(models.Model):
                 'move_type': 'in_invoice',
                 'partner_id': order.partner_id.id,
                 'invoice_date': order.date_order,
-                'date' : order.date_order,
+                'invoice_date_due': order.date_order,
                 'company_id': order.company_id.id,
                 'currency_id': order.currency_id.id,
                 'invoice_origin': order.name,
@@ -284,6 +304,7 @@ class AccountMove(models.Model):
                 'move_type': 'out_invoice',
                 'partner_id': order.partner_id.id,
                 'invoice_date': order.date_order,
+                'invoice_date_due': order.date_order,
                 'company_id': order.company_id.id,
                 'currency_id': order.currency_id.id,
                 'invoice_origin': order.name,
@@ -313,7 +334,66 @@ class AccountMove(models.Model):
         invoice.message_post(body=note)
 
         return invoice
+    
+    
+class PurchaseOrderLine(models.Model):
+    _inherit = 'purchase.order.line'
 
+    qty_invoiced = fields.Float(compute='_compute_qty_invoiced', string="Billed Qty", digits='Product Unit of Measure', store=True)
+
+    @api.depends('invoice_lines.move_id.state', 'invoice_lines.quantity', 'qty_received', 'product_uom_qty', 'order_id.state', 'order_id.is_import')
+    def _compute_qty_invoiced(self):
+        for line in self:
+            if line.order_id.is_import:
+                # If is_import in purchase order is True, set qty_invoiced to product_qty
+                line.qty_invoiced = line.product_qty
+            else:
+                # Otherwise, apply the original computation logic
+                qty = 0.0
+                for inv_line in line._get_invoice_lines():
+                    if inv_line.move_id.state not in ['cancel'] or inv_line.move_id.payment_state == 'invoicing_legacy':
+                        if inv_line.move_id.move_type == 'in_invoice':
+                            qty += inv_line.product_uom_id._compute_quantity(inv_line.quantity, line.product_uom)
+                        elif inv_line.move_id.move_type == 'in_refund':
+                            qty -= inv_line.product_uom_id._compute_quantity(inv_line.quantity, line.product_uom)
+                line.qty_invoiced = qty
+
+
+class SaleOrderLine(models.Model):
+    _inherit = 'sale.order.line'
+    
+    # Analytic & Invoicing fields
+    qty_invoiced = fields.Float(
+        string="Invoiced Quantity",
+        compute='_compute_qty_invoiced',
+        digits='Product Unit of Measure',
+        store=True)
+    
+    @api.depends('invoice_lines.move_id.state', 'invoice_lines.quantity')
+    def _compute_qty_invoiced(self):
+        """
+        Compute the quantity invoiced. If case of a refund, the quantity invoiced is decreased. Note
+        that this is the case only if the refund is generated from the SO and that is intentional: if
+        a refund made would automatically decrease the invoiced quantity, then there is a risk of reinvoicing
+        it automatically, which may not be wanted at all. That's why the refund has to be created from the SO
+        """
+    
+        for line in self:
+            if line.order_id.is_import:
+                # If is_import in sale order is True, set qty_invoiced to product_qty
+                line.qty_invoiced = line.product_uom_qty
+            else:
+                qty_invoiced = 0.0
+                for invoice_line in line._get_invoice_lines():
+                    if invoice_line.move_id.state != 'cancel' or invoice_line.move_id.payment_state == 'invoicing_legacy':
+                        if invoice_line.move_id.move_type == 'out_invoice':
+                            qty_invoiced += invoice_line.product_uom_id._compute_quantity(invoice_line.quantity, line.product_uom)
+                        elif invoice_line.move_id.move_type == 'out_refund':
+                            qty_invoiced -= invoice_line.product_uom_id._compute_quantity(invoice_line.quantity, line.product_uom)
+                line.qty_invoiced = qty_invoiced
+    
+               
+            
 class Utilities(models.AbstractModel):
     _name = 'automation.workflow.utilities'
 

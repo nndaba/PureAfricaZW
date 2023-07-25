@@ -14,7 +14,7 @@
                <button class="oe_stat_button" type="object" name="view_invoice_action" icon="fa-edit" attrs="{'invisible': [('is_import', '=', False)]}">
                  <span class="o_stat_text">Invoices</span>
               </button>
-              <field name="is_import" invisible="0" />
+              <field name="is_import" invisible="0" readonly="1"/>
             </div>
       </field>
     </record>
@@ -32,7 +32,7 @@
                <button class="oe_stat_button" type="object" name="view_sale_invoice_action" icon="fa-edit" attrs="{'invisible': [('is_import', '=', False)]}">
                  <span class="o_stat_text">Invoices</span>
               </button>
-              <field name="is_import" invisible="0" />
+              <field name="is_import" invisible="0" readonly="1"/>
             </div>
       </field>
     </record>
