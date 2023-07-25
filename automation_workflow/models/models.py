@@ -140,7 +140,7 @@ class PurchaseOrder(models.Model):
     @api.model
     def create(self, vals):
 
-        try:
+        # try:
         #     # Call the original create() method to perform the import
         #     return super(MyCustomModel, self).create(vals)
         # except UserError as e:
