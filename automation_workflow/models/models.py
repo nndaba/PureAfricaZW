@@ -339,61 +339,61 @@ class AccountMove(models.Model):
         return invoice
     
     
-class PurchaseOrderLine(models.Model):
-    _inherit = 'purchase.order.line'
+# class PurchaseOrderLine(models.Model):
+#     _inherit = 'purchase.order.line'
 
-    qty_invoiced = fields.Float(compute='_compute_qty_invoiced', string="Billed Qty", digits='Product Unit of Measure', store=True)
+#     qty_invoiced = fields.Float(compute='_compute_qty_invoiced', string="Billed Qty", digits='Product Unit of Measure', store=True)
 
-    @api.depends('invoice_lines.move_id.state', 'invoice_lines.quantity', 'qty_received', 'product_uom_qty', 'order_id.state', 'order_id.is_import')
-    def _compute_qty_invoiced(self):
-        for line in self:
-            if line.order_id.is_import:
-                # If is_import in purchase order is True, set qty_invoiced to product_qty
-                line.qty_invoiced = line.product_qty
-            else:
-                # Otherwise, apply the original computation logic
-                qty = 0.0
-                for inv_line in line._get_invoice_lines():
-                    if inv_line.move_id.state not in ['cancel'] or inv_line.move_id.payment_state == 'invoicing_legacy':
-                        if inv_line.move_id.move_type == 'in_invoice':
-                            qty += inv_line.product_uom_id._compute_quantity(inv_line.quantity, line.product_uom)
-                        elif inv_line.move_id.move_type == 'in_refund':
-                            qty -= inv_line.product_uom_id._compute_quantity(inv_line.quantity, line.product_uom)
-                line.qty_invoiced = qty
+#     @api.depends('invoice_lines.move_id.state', 'invoice_lines.quantity', 'qty_received', 'product_uom_qty', 'order_id.state', 'order_id.is_import')
+#     def _compute_qty_invoiced(self):
+#         for line in self:
+#             if line.order_id.is_import:
+#                 # If is_import in purchase order is True, set qty_invoiced to product_qty
+#                 line.qty_invoiced = line.product_qty
+#             else:
+#                 # Otherwise, apply the original computation logic
+#                 qty = 0.0
+#                 for inv_line in line._get_invoice_lines():
+#                     if inv_line.move_id.state not in ['cancel'] or inv_line.move_id.payment_state == 'invoicing_legacy':
+#                         if inv_line.move_id.move_type == 'in_invoice':
+#                             qty += inv_line.product_uom_id._compute_quantity(inv_line.quantity, line.product_uom)
+#                         elif inv_line.move_id.move_type == 'in_refund':
+#                             qty -= inv_line.product_uom_id._compute_quantity(inv_line.quantity, line.product_uom)
+#                 line.qty_invoiced = qty
 
 
-class SaleOrderLine(models.Model):
-    _inherit = 'sale.order.line'
+# class SaleOrderLine(models.Model):
+#     _inherit = 'sale.order.line'
     
-    # Analytic & Invoicing fields
-    qty_invoiced = fields.Float(
-        string="Invoiced Quantity",
-        compute='_compute_qty_invoiced',
-        digits='Product Unit of Measure',
-        store=True)
+#     # Analytic & Invoicing fields
+#     qty_invoiced = fields.Float(
+#         string="Invoiced Quantity",
+#         compute='_compute_qty_invoiced',
+#         digits='Product Unit of Measure',
+#         store=True)
     
-    @api.depends('invoice_lines.move_id.state', 'invoice_lines.quantity')
-    def _compute_qty_invoiced(self):
-        """
-        Compute the quantity invoiced. If case of a refund, the quantity invoiced is decreased. Note
-        that this is the case only if the refund is generated from the SO and that is intentional: if
-        a refund made would automatically decrease the invoiced quantity, then there is a risk of reinvoicing
-        it automatically, which may not be wanted at all. That's why the refund has to be created from the SO
-        """
+#     @api.depends('invoice_lines.move_id.state', 'invoice_lines.quantity')
+#     def _compute_qty_invoiced(self):
+#         """
+#         Compute the quantity invoiced. If case of a refund, the quantity invoiced is decreased. Note
+#         that this is the case only if the refund is generated from the SO and that is intentional: if
+#         a refund made would automatically decrease the invoiced quantity, then there is a risk of reinvoicing
+#         it automatically, which may not be wanted at all. That's why the refund has to be created from the SO
+#         """
     
-        for line in self:
-            if line.order_id.is_import:
-                # If is_import in sale order is True, set qty_invoiced to product_qty
-                line.qty_invoiced = line.product_uom_qty
-            else:
-                qty_invoiced = 0.0
-                for invoice_line in line._get_invoice_lines():
-                    if invoice_line.move_id.state != 'cancel' or invoice_line.move_id.payment_state == 'invoicing_legacy':
-                        if invoice_line.move_id.move_type == 'out_invoice':
-                            qty_invoiced += invoice_line.product_uom_id._compute_quantity(invoice_line.quantity, line.product_uom)
-                        elif invoice_line.move_id.move_type == 'out_refund':
-                            qty_invoiced -= invoice_line.product_uom_id._compute_quantity(invoice_line.quantity, line.product_uom)
-                line.qty_invoiced = qty_invoiced
+#         for line in self:
+#             if line.order_id.is_import:
+#                 # If is_import in sale order is True, set qty_invoiced to product_qty
+#                 line.qty_invoiced = line.product_uom_qty
+#             else:
+#                 qty_invoiced = 0.0
+#                 for invoice_line in line._get_invoice_lines():
+#                     if invoice_line.move_id.state != 'cancel' or invoice_line.move_id.payment_state == 'invoicing_legacy':
+#                         if invoice_line.move_id.move_type == 'out_invoice':
+#                             qty_invoiced += invoice_line.product_uom_id._compute_quantity(invoice_line.quantity, line.product_uom)
+#                         elif invoice_line.move_id.move_type == 'out_refund':
+#                             qty_invoiced -= invoice_line.product_uom_id._compute_quantity(invoice_line.quantity, line.product_uom)
+#                 line.qty_invoiced = qty_invoiced
     
                
             
