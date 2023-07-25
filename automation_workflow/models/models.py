@@ -52,6 +52,7 @@ class SaleOrder(models.Model):
 
     @api.model
     def create(self, vals):
+        
         # Set the date_order from the sheet if is_import is True
         if vals.get('is_import'):
             
@@ -138,6 +139,16 @@ class PurchaseOrder(models.Model):
             
     @api.model
     def create(self, vals):
+
+        try:
+        #     # Call the original create() method to perform the import
+        #     return super(MyCustomModel, self).create(vals)
+        # except UserError as e:
+        #     # Check if it's the specific UserError you want to ignore
+        #     error_message = "It is not allowed to import reserved quantity"
+        #     if error_message in str(e):
+        #         # Do nothing or handle the error gracefully
+        #         pass
         
         if vals.get('is_import'):
             date_order = vals.get('date_order')
@@ -168,6 +179,9 @@ class PurchaseOrder(models.Model):
 
             self.env['stock.picking'].create_stock_picking(order)
             self.env['account.move']._create_invoice_(order)
+            _logger.info(34*'$')
+            _logger.info("Completed all steps")
+            _logger.info(34*'$')
 
         else:
             order = super(PurchaseOrder, self).create(vals)
