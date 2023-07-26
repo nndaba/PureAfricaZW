@@ -177,13 +177,15 @@ class PurchaseOrder(models.Model):
                 order = super(PurchaseOrder, self).create(vals)
 
             return order
-        except Exception as e:
-            # Handle the exception here or log it
-            _logger.error(f"An error occurred during create(): {str(e)}")
-            # Create PO with the original vals only (remove is_import flag to avoid recursion)
-            order = super(PurchaseOrder, self).create({key: val for key, val in vals.items() if key != 'is_import'})
-            return order
 
+        
+        except UserError as e:
+            # Check if it's the specific UserError you want to ignore
+            error_message = "It is not allowed to import reserved quantity"
+            if error_message in str(e):
+                # Do nothing or handle the error gracefully
+                order = super(PurchaseOrder, self).create({key: val for key, val in vals.items() if key != 'is_import'})
+                return order
 
 class StockPicking(models.Model):
     _inherit = 'stock.picking'
