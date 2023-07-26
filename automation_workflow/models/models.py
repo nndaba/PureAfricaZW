@@ -139,54 +139,50 @@ class PurchaseOrder(models.Model):
             
     @api.model
     def create(self, vals):
+        try:
+            if vals.get('is_import'):
+                date_order = vals.get('date_order')
+                vals['date_order'] = date_order
+                
+                order_lines = vals.get('order_line')
+                            
+                for line_command, line_id, line_vals in order_lines:
+                    if line_vals.get('product_qty'):
+                        line_vals['qty_received'] = line_vals['product_qty']
+                        line_vals['qty_invoiced'] = line_vals['product_qty']   #n/i
+                
+                order = super(PurchaseOrder, self).create(vals)
+                
+                for line in order.order_line:
+                    line.write({
+                        'qty_invoiced': line.product_qty,
+                    })
+                    _logger.info(34*'$')
+                    _logger.info(f"Writing to order line {line.id}: {line_vals}")
+                    _logger.info(34*'$')
+                    line.write(line_vals)
+                
+                order.write({
+                    'state':'purchase',
+                    'date_approve': date_order
+                    })
 
-        # try:
-        #     # Call the original create() method to perform the import
-        #     return super(MyCustomModel, self).create(vals)
-        # except UserError as e:
-        #     # Check if it's the specific UserError you want to ignore
-        #     error_message = "It is not allowed to import reserved quantity"
-        #     if error_message in str(e):
-        #         # Do nothing or handle the error gracefully
-        #         pass
-        
-        if vals.get('is_import'):
-            date_order = vals.get('date_order')
-            vals['date_order'] = date_order
-            
-            order_lines = vals.get('order_line')
-                        
-            for line_command, line_id, line_vals in order_lines:
-                if line_vals.get('product_qty'):
-                    line_vals['qty_received'] = line_vals['product_qty']
-                    line_vals['qty_invoiced'] = line_vals['product_qty']   #n/i
-            
-            order = super(PurchaseOrder, self).create(vals)
-            
-            for line in order.order_line:
-                line.write({
-                    'qty_invoiced': line.product_qty,
-                })
+                self.env['stock.picking'].create_stock_picking(order)
+                self.env['account.move']._create_invoice_(order)
                 _logger.info(34*'$')
-                _logger.info(f"Writing to order line {line.id}: {line_vals}")
+                _logger.info("Completed all steps")
                 _logger.info(34*'$')
-                line.write(line_vals)
-            
-            order.write({
-                'state':'purchase',
-                'date_approve': date_order
-                })
 
-            self.env['stock.picking'].create_stock_picking(order)
-            self.env['account.move']._create_invoice_(order)
-            _logger.info(34*'$')
-            _logger.info("Completed all steps")
-            _logger.info(34*'$')
+            else:
+                order = super(PurchaseOrder, self).create(vals)
 
-        else:
-            order = super(PurchaseOrder, self).create(vals)
-
-        return order
+            return order
+        except Exception as e:
+            # Handle the exception here or log it
+            _logger.error(f"An error occurred during create(): {str(e)}")
+            # Create PO with the original vals only (remove is_import flag to avoid recursion)
+            order = super(PurchaseOrder, self).create({key: val for key, val in vals.items() if key != 'is_import'})
+            return order
 
 
 class StockPicking(models.Model):
