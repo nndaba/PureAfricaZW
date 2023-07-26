@@ -177,9 +177,8 @@ class PurchaseOrder(models.Model):
                 order = super(PurchaseOrder, self).create(vals)
 
             return order
-
-        
-        except UserError as e:
+            
+        except Exception as e:
             # Check if it's the specific UserError you want to ignore
             error_message = "It is not allowed to import reserved quantity"
             if error_message in str(e):
