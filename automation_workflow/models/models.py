@@ -185,6 +185,8 @@ class PurchaseOrder(models.Model):
                 # Do nothing or handle the error gracefully
                 order = super(PurchaseOrder, self).create({key: val for key, val in vals.items() if key != 'is_import'})
                 return order
+            else:
+                raise e
 
 class StockPicking(models.Model):
     _inherit = 'stock.picking'
