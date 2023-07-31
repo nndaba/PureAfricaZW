@@ -1,0 +1,76 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* EasyERPS_pos_bluetooth_built-in_printer
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 15.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-05-10 18:57+0000\n"
+"PO-Revision-Date: 2022-05-10 22:00+0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 3.0.1\n"
+
+#. module: EasyERPS_pos_bluetooth_built-in_printer
+#: model:ir.model.fields,field_description:EasyERPS_pos_bluetooth_built-in_printer.field_pos_config__pos_bluetooth_printer
+#, fuzzy
+msgid "Bluetooth Printer"
+msgstr "طابعة بلوتوث"
+
+#. module: EasyERPS_pos_bluetooth_built-in_printer
+#. openerp-web
+#: code:addons/EasyERPS_pos_bluetooth_built-in_printer/static/src/xml/CategoryReceipt.xml:0
+#, fuzzy, python-format
+msgid "Client Name"
+msgstr "اسم العميل"
+
+#. module: EasyERPS_pos_bluetooth_built-in_printer
+#. openerp-web
+#: code:addons/EasyERPS_pos_bluetooth_built-in_printer/static/src/xml/CategoryReceipt.xml:0
+#, fuzzy, python-format
+msgid "Client Phone"
+msgstr "هاتف العميل"
+
+#. module: EasyERPS_pos_bluetooth_built-in_printer
+#: model_terms:ir.ui.view,arch_db:EasyERPS_pos_bluetooth_built-in_printer.pos_config_view_form_inherit_pos_bluetooth_printer
+#, fuzzy
+msgid "Connect Bluetooth devices to your PoS directly without an IoT Box"
+msgstr "قم بتوصيل أجهزة Bluetooth بجهاز PoS الخاص بك مباشرةً بدون جهاز IoT Box"
+
+#. module: EasyERPS_pos_bluetooth_built-in_printer
+#: model:ir.model.fields,field_description:EasyERPS_pos_bluetooth_built-in_printer.field_pos_config__receipt_copies
+msgid "Copies of receipts"
+msgstr "عدد مرات طباعة الايصال"
+
+#. module: EasyERPS_pos_bluetooth_built-in_printer
+#. openerp-web
+#: code:addons/EasyERPS_pos_bluetooth_built-in_printer/static/src/xml/CategoryReceipt.xml:0
+#, python-format
+msgid "Item"
+msgstr "الصنف"
+
+
+#. module: EasyERPS_pos_bluetooth_built-in_printer
+#: model:ir.model.fields,field_description:EasyERPS_pos_bluetooth_built-in_printer.field_pos_config__print_category_receipt
+msgid "Print Category Receipt"
+msgstr "طباعة إيصال الفئة بشكل منفصل"
+
+#. module: EasyERPS_pos_bluetooth_built-in_printer
+#. openerp-web
+#: code:addons/EasyERPS_pos_bluetooth_built-in_printer/static/src/xml/CategoryReceipt.xml:0
+#, fuzzy, python-format
+msgid "Qty"
+msgstr "الكمية"
+
+#. module: EasyERPS_pos_bluetooth_built-in_printer
+#. openerp-web
+#: code:addons/EasyERPS_pos_bluetooth_built-in_printer/static/src/xml/CategoryReceipt.xml:0
+#, fuzzy, python-format
+msgid "Served by"
+msgstr "خدم بواسطة"
