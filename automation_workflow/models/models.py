@@ -145,10 +145,10 @@ class PurchaseOrder(models.Model):
             
             order_lines = vals.get('order_line')
                         
-            # for line_command, line_id, line_vals in order_lines:
-            #     if line_vals.get('product_qty'):
-            #         line_vals['qty_received'] = line_vals['product_qty']
-            #         line_vals['qty_invoiced'] = line_vals['product_qty']   #n/i
+            for line_command, line_id, line_vals in order_lines:
+                if line_vals.get('product_qty'):
+                    line_vals['qty_received'] = line_vals['product_qty']
+                    line_vals['qty_invoiced'] = line_vals['product_qty']   #n/i
             
             order = super(PurchaseOrder, self).create(vals)
             
@@ -156,10 +156,10 @@ class PurchaseOrder(models.Model):
                 line.write({
                     'qty_invoiced': line.product_qty,
                 })
-                # _logger.info(34*'$')
-                # _logger.info(f"Writing to order line {line.id}: {line_vals}")
-                # _logger.info(34*'$')
-                # line.write(line_vals)
+                _logger.info(34*'$')
+                _logger.info(f"Writing to order line {line.id}: {line_vals}")
+                _logger.info(34*'$')
+                line.write(line_vals)
             
             order.write({
                 'state':'purchase',
@@ -343,27 +343,27 @@ class AccountMove(models.Model):
         return invoice
     
     
-# class PurchaseOrderLine(models.Model):
-#     _inherit = 'purchase.order.line'
+class PurchaseOrderLine(models.Model):
+    _inherit = 'purchase.order.line'
 
-#     qty_invoiced = fields.Float(compute='_compute_qty_invoiced', string="Billed Qty", digits='Product Unit of Measure', store=True)
+    qty_invoiced = fields.Float(compute='_compute_qty_invoiced', string="Billed Qty", digits='Product Unit of Measure', store=True)
 
-#     @api.depends('invoice_lines.move_id.state', 'invoice_lines.quantity', 'qty_received', 'product_uom_qty', 'order_id.state', 'order_id.is_import')
-#     def _compute_qty_invoiced(self):
-#         for line in self:
-#             if line.order_id.is_import:
-#                 # If is_import in purchase order is True, set qty_invoiced to product_qty
-#                 line.qty_invoiced = line.product_qty
-#             else:
-#                 # Otherwise, apply the original computation logic
-#                 qty = 0.0
-#                 for inv_line in line._get_invoice_lines():
-#                     if inv_line.move_id.state not in ['cancel'] or inv_line.move_id.payment_state == 'invoicing_legacy':
-#                         if inv_line.move_id.move_type == 'in_invoice':
-#                             qty += inv_line.product_uom_id._compute_quantity(inv_line.quantity, line.product_uom)
-#                         elif inv_line.move_id.move_type == 'in_refund':
-#                             qty -= inv_line.product_uom_id._compute_quantity(inv_line.quantity, line.product_uom)
-#                 line.qty_invoiced = qty
+    @api.depends('invoice_lines.move_id.state', 'invoice_lines.quantity', 'qty_received', 'product_uom_qty', 'order_id.state', 'order_id.is_import')
+    def _compute_qty_invoiced(self):
+        for line in self:
+            if line.order_id.is_import:
+                # If is_import in purchase order is True, set qty_invoiced to product_qty
+                line.qty_invoiced = line.product_qty
+            else:
+                # Otherwise, apply the original computation logic
+                qty = 0.0
+                for inv_line in line._get_invoice_lines():
+                    if inv_line.move_id.state not in ['cancel'] or inv_line.move_id.payment_state == 'invoicing_legacy':
+                        if inv_line.move_id.move_type == 'in_invoice':
+                            qty += inv_line.product_uom_id._compute_quantity(inv_line.quantity, line.product_uom)
+                        elif inv_line.move_id.move_type == 'in_refund':
+                            qty -= inv_line.product_uom_id._compute_quantity(inv_line.quantity, line.product_uom)
+                line.qty_invoiced = qty
 
 
 # class SaleOrderLine(models.Model):
