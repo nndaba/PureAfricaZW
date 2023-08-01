@@ -156,10 +156,10 @@ class PurchaseOrder(models.Model):
                 line.write({
                     'qty_invoiced': line.product_qty,
                 })
-                _logger.info(34*'$')
-                _logger.info(f"Writing to order line {line.id}: {line_vals}")
-                _logger.info(34*'$')
-                line.write(line_vals)
+                # _logger.info(34*'$')
+                # _logger.info(f"Writing to order line {line.id}: {line_vals}")
+                # _logger.info(34*'$')
+                # line.write(line_vals)
             
             order.write({
                 'state':'purchase',
