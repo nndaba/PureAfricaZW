@@ -1,60 +1,74 @@
 <odoo>
   <data>
-    <!-- explicit list view definition -->
-<!--
-    <record model="ir.ui.view" id="automation_routine.list">
-      <field name="name">automation_routine list</field>
-      <field name="model">automation_routine.automation_routine</field>
+
+
+    <record id="view_sale_order_pick_wizard_form" model="ir.ui.view">
+      <field name="name">sale.order.pick.wizard.form</field>
+      <field name="model">sale.wizard</field>
       <field name="arch" type="xml">
-        <tree>
-          <field name="name"/>
-          <field name="value"/>
-          <field name="value2"/>
-        </tree>
+          <form>
+              <group>
+                  <field name="order_ids" widget="many2many_tags" />
+              </group>
+              <footer>
+                  <button string="Execute" type="object" name="action_execute" class="btn-primary" />
+                  <button string="Cancel" class="btn-secondary" special="cancel" />
+              </footer>
+          </form>
       </field>
-    </record>
--->
+    </record>   
 
-    <!-- actions opening views on models -->
-<!--
-    <record model="ir.actions.act_window" id="automation_routine.action_window">
-      <field name="name">automation_routine window</field>
-      <field name="res_model">automation_routine.automation_routine</field>
-      <field name="view_mode">tree,form</field>
-    </record>
--->
 
-    <!-- server action to the one above -->
-<!--
-    <record model="ir.actions.server" id="automation_routine.action_server">
-      <field name="name">automation_routine server</field>
-      <field name="model_id" ref="model_automation_routine_automation_routine"/>
-      <field name="state">code</field>
-      <field name="code">
-        action = {
-          "type": "ir.actions.act_window",
-          "view_mode": "tree,form",
-          "res_model": model._name,
-        }
+    <record id="view_purchase_order_pick_wizard_form" model="ir.ui.view">
+      <field name="name">purchase.order.pick.wizard.form</field>
+      <field name="model">purchase.wizard</field>
+      <field name="arch" type="xml">
+          <form>
+              <group>
+                  <field name="order_ids" widget="many2many_tags" />
+              </group>
+              <footer>
+                  <button string="Execute" type="object" name="action_execute" class="btn-primary" />
+                  <button string="Cancel" class="btn-secondary" special="cancel" />
+              </footer>
+          </form>
       </field>
-    </record>
--->
+    </record> 
 
-    <!-- Top menu item -->
-<!--
-    <menuitem name="automation_routine" id="automation_routine.menu_root"/>
--->
-    <!-- menu categories -->
-<!--
-    <menuitem name="Menu 1" id="automation_routine.menu_1" parent="automation_routine.menu_root"/>
-    <menuitem name="Menu 2" id="automation_routine.menu_2" parent="automation_routine.menu_root"/>
--->
-    <!-- actions -->
-<!--
-    <menuitem name="List" id="automation_routine.menu_1_list" parent="automation_routine.menu_1"
-              action="automation_routine.action_window"/>
-    <menuitem name="Server to list" id="automation_routine" parent="automation_routine.menu_2"
-              action="automation_routine.action_server"/>
--->
+    <act_window name="Automate Sales"
+        id="action_pick_orders"
+        res_model="sale.order"
+        binding_model="sale.order"
+        binding_views="tree"
+        view_mode="form"
+        target="new"
+    />
+
+     <act_window name="Automate Purchase"
+        id="action_pick_purchase_orders"
+        res_model="purchase.order"
+        binding_model="purchase.order"
+        binding_views="tree"
+        view_mode="form"
+        target="new"
+    />
+
+    <!-- <record id="action_pick_orders" model="ir.actions.act_window">
+        <field name="name">Automate</field>
+        <field name="res_model">sale.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_sale_order_pick_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+
+    <record id="action_pick_purchase_orders" model="ir.actions.act_window">
+        <field name="name">Automate</field>
+        <field name="res_model">purchase.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_purchase_order_pick_wizard_form"/>
+        <field name="target">new</field>
+    </record>  -->
+
+
   </data>
 </odoo>
