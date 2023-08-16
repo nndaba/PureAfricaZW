@@ -1,0 +1,74 @@
+<odoo>
+  <data>
+
+
+    <record id="view_sale_order_pick_wizard_form" model="ir.ui.view">
+      <field name="name">sale.order.pick.wizard.form</field>
+      <field name="model">sale.wizard</field>
+      <field name="arch" type="xml">
+          <form>
+              <group>
+                  <field name="order_ids" widget="many2many_tags" />
+              </group>
+              <footer>
+                  <button string="Execute" type="object" name="action_execute" class="btn-primary" />
+                  <button string="Cancel" class="btn-secondary" special="cancel" />
+              </footer>
+          </form>
+      </field>
+    </record>   
+
+
+    <record id="view_purchase_order_pick_wizard_form" model="ir.ui.view">
+      <field name="name">purchase.order.pick.wizard.form</field>
+      <field name="model">purchase.wizard</field>
+      <field name="arch" type="xml">
+          <form>
+              <group>
+                  <field name="order_ids" widget="many2many_tags" />
+              </group>
+              <footer>
+                  <button string="Execute" type="object" name="action_execute" class="btn-primary" />
+                  <button string="Cancel" class="btn-secondary" special="cancel" />
+              </footer>
+          </form>
+      </field>
+    </record> 
+
+    <act_window name="Automate Sales"
+        id="action_pick_orders"
+        res_model="sale.order"
+        binding_model="sale.order"
+        binding_views="tree"
+        view_mode="form"
+        target="new"
+    />
+
+     <act_window name="Automate Purchase"
+        id="action_pick_purchase_orders"
+        res_model="purchase.order"
+        binding_model="purchase.order"
+        binding_views="tree"
+        view_mode="form"
+        target="new"
+    />
+
+    <!-- <record id="action_pick_orders" model="ir.actions.act_window">
+        <field name="name">Automate</field>
+        <field name="res_model">sale.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_sale_order_pick_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+
+    <record id="action_pick_purchase_orders" model="ir.actions.act_window">
+        <field name="name">Automate</field>
+        <field name="res_model">purchase.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_purchase_order_pick_wizard_form"/>
+        <field name="target">new</field>
+    </record>  -->
+
+
+  </data>
+</odoo>
