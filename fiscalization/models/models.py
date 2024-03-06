@@ -7,19 +7,6 @@ import requests
 import datetime
 from datetime import timedelta
 
-# class fiscalization(models.Model):
-#     _name = 'fiscalization.fiscalization'
-#     _description = 'fiscalization.fiscalization'
-
-#     name = fields.Char()
-#     value = fields.Integer()
-#     value2 = fields.Float(compute="_value_pc", store=True)
-#     description = fields.Text()
-#
-#     @api.depends('value')
-#     def _value_pc(self):
-#         for record in self:
-#             record.value2 = float(record.value) / 100
 
 
 class DialogBox(models.TransientModel):
@@ -28,17 +15,36 @@ class DialogBox(models.TransientModel):
     title = fields.Char(string='Title', readonly=True)
     message = fields.Char(string='Message', readonly=True)
 
+class ResCompany(models.Model):
+    _inherit = 'res.company'
+    
+    bp_number = fields.Char(string='BP Number')
+    tin_number = fields.Char(string='TIN Number')
+    
+    
 
 class account_move(models.Model):
-    _name = 'account.move'
     _inherit = 'account.move'
+    
+    bp_number = fields.Char(string='BP Number')
+    vat = fields.Char(string='Vat Number')
+    customer_tin = fields.Char(string='Customer TIN')
 
     fiscal_signature = fields.Char(string='Signature')
     fiscal_date = fields.Datetime(string='Fiscalization Date')
+    device_id = fields.Char(string='Device Id')
+    rgn = fields.Char(string='Receipt Global Number')
+    receiptnumber = fields.Char(string='Receipt number')
+    fiscalday = fields.Char(string='Fiscal Day')
+    VerificationCode = fields.Char(string='VerificationCode')
+    
 
+    # def get_cust_tin(self):
+    #     tin_num = self.partner_id.x_studio_tin_number
+    #     self.customer_tin = tin_num
+            
     @api.model
     def handle_fiscalize(self, account_info):
-        #url = "http://154.119.80.13:3000/revmax/post"
         url = "http://196.27.106.118:3000/pos/post"
 
         headers = {'Content-Type': 'application/json'}
@@ -53,8 +59,20 @@ class account_move(models.Model):
                     message = "Already Fiscalized"
                     break
 
+                
+                        
                 lines = self.env['account.move.line'].search(
-                    [('move_id', '=', invoice.id)])
+                    [('move_id', '=', invoice.id), ("exclude_from_invoice_tab", "=", False),("quantity", ">", 0)])
+                
+                reverse_entry = ''
+                if invoice.move_type == 'out_refund':
+                    reverse = invoices = self.env['account.move'].search(
+                    [("id", "=", invoice.reversed_entry_id.id)])
+                    reverse_entry = reverse.name
+
+                else:
+                    pass
+                
 
                 parsed_invoice = {
                     'invoice_id': invoice.id,
@@ -66,7 +84,10 @@ class account_move(models.Model):
                     'amount_tax': invoice.amount_tax,
                     'cashier': invoice.create_uid.name,
                     'comment': invoice.narration,
-                    'currency': invoice.currency_id.name
+                    'currency': invoice.currency_id.name,
+                    'invoicestatus': invoice.move_type,
+                    'ref': reverse_entry,
+                    'amount_untaxed' : invoice.amount_untaxed
                 }
 
                 _lines = []
@@ -78,7 +99,7 @@ class account_move(models.Model):
                         'price': line.price_unit,
                         'amount': line.price_total,
                         'tax': line.price_total - line.price_subtotal,
-                        'tax_r': 0.145
+                        'tax_r': 0.15
                     }
 
                     _lines.append(parsed_line)
@@ -89,10 +110,20 @@ class account_move(models.Model):
                 }
 
                 resp = requests.post(url=url, json=data, headers=headers)
+                values = resp.json()
 
-                if(resp.status_code == 200):
-                    invoice.fiscal_signature = resp.content
+                if(values['code'] == '1'):
+                    invoice.fiscal_signature = values['qrcode']
                     invoice.fiscal_date = datetime.datetime.now()
+
+                    invoice.device_id = values['device_id']
+                    invoice.fiscalday = values['FiscalDay']
+                    invoice.rgn = values['rgn']
+                    invoice.receiptnumber = values['receiptnumbers']
+                    invoice.VerificationCode = values['VerificationCode']
+                    invoice.bp_number = "200002908"
+                    invoice.vat = "10003809"
+
 
                     message = invoice.fiscal_signature
 
@@ -115,7 +146,7 @@ class account_move(models.Model):
                     })
 
                 else:
-                    message = f"Failed to fiscalize: {resp.status_code}"
+                    message = f"Failed to fiscalize: {values['message']}"
 
                 break
 
@@ -145,3 +176,10 @@ def subtract_two_hours(date_):
     time_ = date_ + timedelta(hours=2)
 
     return time_.strftime("%Y-%m-%d %H:%M:%S")
+
+
+
+# class respartner(models.Model):
+#     _inherit = 'res.partner'
+    
+#     vs = fields.Char(string='TIN Number')
