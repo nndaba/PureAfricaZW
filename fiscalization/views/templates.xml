@@ -24,6 +24,22 @@
 
 
       <template id="fiscalization_report_invoice_document" inherit_id="account.report_invoice_document">
+         
+
+          <!-- <xpath expr="/t/t/t[@t-set='address']" position="inside">
+            <div class="row mt32 mb32">
+              <div class="col-md-6" t-if="o.vat" name="vat">
+                  <strong>Vat Number:</strong>
+                  <p class="m-0" t-field="o.vat"/>
+              </div>
+              <div class="col-md-6" t-if="o.bp_number" name="bp_number">
+                  <strong>BP Number:</strong>
+                  <p class="m-0" t-field="o.bp_number"/>
+              </div>
+          </div>
+          </xpath> -->
+
+
           <xpath expr="/t/t/div/div[2]/div/div/table/t[2]/t/t[3]/tr/td[1]" position="before">
             <td>
               <span t-field="o.fiscal_signature"/>
@@ -64,8 +80,13 @@
                 <span>
                   <strong>Signature:</strong>
                   <br/>
+                  <img t-att-src="'/report/barcode/QR/'+str(o.fiscal_signature)" style="width:200px;height:200px" alt="Barcode"/>
                 </span>
+                
                 <span t-field="o.fiscal_signature"/>
+                <!-- <div>
+                    <img t-att-src="'/report/barcode/QR/Ofthebest'" style="width:200px;height:75px" alt="Barcode"/>
+                </div> -->
               </div>
               <div class="col-3"/>
               <div class="col-3"/>
