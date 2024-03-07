@@ -1,95 +1,81 @@
 <odoo>
     <data>
-<!--
-        <template id="listing">
-          <ul>
-            <li t-foreach="objects" t-as="object">
-              <a t-attf-href="#{ root }/objects/#{ object.id }">
-                <t t-esc="object.display_name"/>
-              </a>
-            </li>
-          </ul>
-        </template>
-        <template id="object">
-          <h1><t t-esc="object.display_name"/></h1>
-          <dl>
-            <t t-foreach="object._fields" t-as="field">
-              <dt><t t-esc="field"/></dt>
-              <dd><t t-esc="object[field]"/></dd>
-            </t>
-          </dl>
-        </template>
--->
-
 
 
       <template id="fiscalization_report_invoice_document" inherit_id="account.report_invoice_document">
-          <xpath expr="/t/t/div/div[2]/div/div/table/t[2]/t/t[3]/tr/td[1]" position="before">
-            <td>
-              <span t-field="o.fiscal_signature"/>
-            </td>
-          </xpath>
-          <xpath expr="/t/t/div/p[1]" position="after">
+
+        <xpath expr="//th[@name='th_taxes']" position="after">
+            <th name="th_tax_amount" t-attf-class="text-left {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}"><span>Tax Amount</span></th>
+        </xpath>
+
+        <xpath expr="//h2" position="after">
             <div class="row">
-              <div class="col">
-                <span t-field="o.fiscal_signature"/>
-              </div>
+                <div class="col-6">
+                    <address t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
+                </div>
+                <div class="col-6 text-right">
+                    <strong>Customer TIN:</strong>
+                    <span t-field="o.partner_id.vat"/><br/>
+                    <strong>Customer VAT:</strong>
+                    <span t-field="o.partner_id.x_studio_new_vat"/><br/>
+                </div>
             </div>
+        </xpath>
+
+          <xpath expr="//h2//span[1]" position="replace">
+              <span t-if="o.move_type == 'out_invoice' and o.state == 'posted'">Fiscal Tax Invoice :</span>
           </xpath>
-          <xpath expr="/t[1]/t[1]/div[1]/div[3]/div[1]/span[1]" position="attributes">
-            <attribute name="t-options-widget">"text"</attribute>
+         
+       
+          <xpath expr="//div[@class='clearfix']" position="after">
+            <div class="row">
+            <!-- Left Side: QR Code -->
+            <div class="col-6">
+                <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
+                    <span>
+                        <img t-att-src="'/report/barcode/QR/'+str(o.fiscal_signature)" style="width:200px;height:200px" alt="Barcode"/>
+                    </span>
+                </div>
+            </div>
+            <!-- Right Side: Text -->
+            <div class="col-6">
+                <div style="display: flex; flex-direction: column; justify-content: center; align-items: flex-start; height: 100%; padding-left: 50px;">
+                    <div>
+                        <strong>Fiscalization Date:</strong>
+                        <span t-field="o.fiscal_date"/>
+                    </div>
+                    <div>
+                        <strong>Device Id:</strong>
+                        <span t-field="o.device_id"/>
+                    </div>
+                    <div>
+                        <strong>Receipt Global Number:</strong>
+                        <span t-field="o.rgn"/>
+                    </div>
+                    <div>
+                        <strong>Receipt number:</strong>
+                        <span t-field="o.receiptnumber"/>
+                    </div>
+                    <div>
+                        <strong>Fiscal Day:</strong>
+                        <span t-field="o.fiscalday"/>
+                    </div>
+                    <div>
+                        <strong>Verification Code:</strong>
+                        <span t-field="o.VerificationCode"/>
+                    </div>
+                    <div>
+                        <strong>Signature:</strong>
+                        <span t-field="o.fiscal_signature"/>
+                    </div>
+                </div>
+              </div>
+        </div>
+        
           </xpath>
-          <xpath expr="/t/t/div/div[3]" position="attributes">
-            <attribute name="class" separator=" " add="text-center"/>
-          </xpath>
+
           
-          <xpath expr="/t[1]/t[1]/div[1]/div[3]/div[1]" position="replace"/>
-          <xpath expr="/t[1]/t[1]/div[1]/div[2]/div[1]/div[1]/table[1]/t[2]/t[1]/t[3]/tr[1]/td[2]" position="replace"/>
-          <xpath expr="/t[1]/t[1]/div[1]/div[2]/div[1]/div[1]/table[1]/t[2]/t[1]/t[3]/tr[1]/td[1]" position="replace"/>
-          
-          <xpath expr="/t/t/div/p[1]" position="after">
-            <div class="row">
-              <div class="col">
-                <span>New Text Block</span>
-              </div>
-            </div>
-          </xpath>
-          <xpath expr="/t/t/div/div[3]/div/span" position="replace">
-            <span>Zimra Signature</span>
-          </xpath>
-          
-          <xpath expr="/t/t/div/div[4]" position="after">
-            <div class="row">
-              <div class="col-3">
-                <span>
-                  <strong>Signature:</strong>
-                  <br/>
-                </span>
-                <span t-field="o.fiscal_signature"/>
-              </div>
-              <div class="col-3"/>
-              <div class="col-3"/>
-              <div class="col-3"/>
-            </div>
-          </xpath>
-          <xpath expr="/t/t/div/div[5]" position="attributes">
-            <attribute name="class" separator=" " add="text-center"/>
-          </xpath>
-          <xpath expr="/t[1]/t[1]/div[1]/div[5]/div[1]/span[1]/strong[1]" position="replace"/>
-          <xpath expr="/t[1]/t[1]/div[1]/div[5]/div[1]/span[2]" position="replace"/>
-          <xpath expr="/t/t/div/div[3]" position="after">
-            <div class="row">
-              <div class="col">
-                <span t-field="o.fiscal_signature"/>
-              </div>
-            </div>
-          </xpath>
-          <xpath expr="/t/t/div/div[3]" position="attributes">
-            <attribute name="class" separator=" " add="text-center"/>
-          </xpath>
-          <xpath expr="/t/t/div/div[4]" position="attributes">
-            <attribute name="class" separator=" " add="text-center"/>
-          </xpath>
+        
       </template>
     </data>
 </odoo>
