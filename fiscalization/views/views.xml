@@ -33,7 +33,7 @@
     </record>
 
 
-    <record model="ir.ui.view" id="res_company_id">
+<!--     <record model="ir.ui.view" id="res_company_id">
       <field name="name">Res Company</field>
       <field name="model">res.company</field>
       <field name="inherit_id" ref="base.view_company_form" />
@@ -44,7 +44,7 @@
         </xpath>
 
       </field>
-    </record>
+    </record> -->
 
 
     <record model="ir.ui.view" id="account_move_ref">
