@@ -33,17 +33,39 @@
     </record>
 
 
+    <record model="ir.ui.view" id="res_company_id">
+      <field name="name">Res Company</field>
+      <field name="model">res.company</field>
+      <field name="inherit_id" ref="base.view_company_form" />
+      <field name="arch" type="xml">
+          <xpath expr="//field[@name='vat']" position="after">
+          <field name="bp_number" />
+          <field name="tin_number" />
+        </xpath>
+
+      </field>
+    </record>
+
+
     <record model="ir.ui.view" id="account_move_ref">
       <field name="name">Account Move</field>
       <field name="model">account.move</field>
       <field name="inherit_id" ref="account.view_move_form" />
       <field name="arch" type="xml">
         <xpath expr="//button[@name='action_register_payment']" position="after">
-          <button name="handle_fiscalize" string="Fiscalize" type="object" style="background:rgba(46, 210, 162,0.2);" attrs="{'invisible': ['|',('state','!=', 'posted'),('fiscal_signature','!=', False)]}" />
+          <button name="handle_fiscalize" string="Fiscalize" type="object" style="background:rgba(46, 210, 162,0.2);"/>
         </xpath>
         <xpath expr="//field[@name='payment_reference']" position="after">
-          <field name="fiscal_signature" />
+          <field name="fiscal_signature" readonly="1"/>
           <field name="fiscal_date" readonly="1"/>
+          <field name="device_id" readonly="1"/>
+          <field name="rgn" readonly="1"/>
+          <field name="receiptnumber" readonly="1"/>
+          <field name="fiscalday" readonly="1"/>
+          <field name="VerificationCode" readonly="1"/>
+          <field name="bp_number" readonly="1"/>
+          <field name="vat" readonly="1"/>
+
         </xpath>
       </field>
     </record>
