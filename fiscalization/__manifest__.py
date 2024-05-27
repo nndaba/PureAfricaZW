@@ -20,15 +20,15 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'account'],
+    'depends': ['base', 'account','contacts'],
 
     # always loaded
     'data': [
         'security/fiscalization_security.xml',
         'security/ir.model.access.csv',
         'views/views.xml',
-       # 'views/templates.xml',
-        'views/cron.xml'
+        # 'views/templates.xml',
+        # 'views/cron.xml'
     ],
     # only loaded in demonstration mode
     'demo': [
