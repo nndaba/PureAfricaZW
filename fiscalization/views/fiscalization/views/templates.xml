@@ -1,0 +1,49 @@
+<odoo>
+    <data>
+      <template id="fiscalization_report_invoice_document" inherit_id="account.report_invoice_document">
+
+           <xpath expr="/t/t/div[2]/div/p[1]" position="after">
+          
+           <div class="row">
+            <div class="col-3">
+            <img t-att-src="'/report/barcode/QR/'+str(o.fiscal_signature)" style="width:200px;height:200px" alt="Barcode"/>
+            </div>
+             <div class="col-3">
+            <strong><span>Fiscal Day:</span></strong>
+             <br/>
+            <span t-field="o.fiscalday"/>
+             <br/>
+             <br/>
+             <strong><span>VerificationCode:</span></strong>
+             <br/>
+            <span t-field="o.VerificationCode"/>
+             <br/>
+            </div>
+            <div class="col-3">
+            <strong><span>Device Id:</span></strong>
+             <br/>
+            <span t-field="o.device_id"/>
+              <br/>
+              <br/>
+            <strong><span>Receipt Counter:</span></strong>
+             <br/>
+            <span t-field="o.receiptnumber"/>
+            </div>
+            <div class="col-3">
+            <strong><span>Invoice Number FDMS:</span></strong>
+             <br/>
+            <span t-field="o.rgn"/>
+             <br/>
+              <br/>
+              <strong><span>Fiscalization Date:</span></strong>
+             <br/>
+            <span t-field="o.fiscal_date"/>
+
+            </div>
+            
+          </div>
+          
+        </xpath>
+      </template>
+    </data>
+</odoo>

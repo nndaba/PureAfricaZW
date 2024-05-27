@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_fiscalization_fiscalization,fiscalization.dialog.box,model_fiscalization_dialog_box,fiscalization.group_admin,1,1,1,1
