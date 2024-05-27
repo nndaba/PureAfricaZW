@@ -14,11 +14,11 @@ class DialogBox(models.TransientModel):
     title = fields.Char(string='Title', readonly=True)
     message = fields.Char(string='Message', readonly=True)
 
-class ResCompany(models.Model):
-    _inherit = 'res.company'
+# class ResCompany(models.Model):
+#     _inherit = 'res.company'
     
-    bp_number = fields.Char(string='BP Number')
-    tin_number = fields.Char(string='TIN Number')
+#     bp_number = fields.Char(string='BP Number')
+#     tin_number = fields.Char(string='TIN Number')
     
     
 
