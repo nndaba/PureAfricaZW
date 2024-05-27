@@ -1,20 +1,6 @@
 <odoo>
   <data>
-    <!-- explicit list view definition -->
-<!--
-    <record model="ir.ui.view" id="fiscalization.list">
-      <field name="name">fiscalization list</field>
-      <field name="model">fiscalization.fiscalization</field>
-      <field name="arch" type="xml">
-        <tree>
-          <field name="name"/>
-          <field name="value"/>
-          <field name="value2"/>
-        </tree>
-      </field>
-    </record>
--->
-
+   
 
     <record model="ir.ui.view" id="message_box_view">
       <field name="name">View Message</field>
@@ -33,7 +19,7 @@
     </record>
 
 
-    <record model="ir.ui.view" id="res_company_id">
+<!--     <record model="ir.ui.view" id="res_company_id">
       <field name="name">Res Company</field>
       <field name="model">res.company</field>
       <field name="inherit_id" ref="base.view_company_form" />
@@ -44,7 +30,7 @@
         </xpath>
 
       </field>
-    </record>
+    </record> -->
 
 
     <record model="ir.ui.view" id="account_move_ref">
