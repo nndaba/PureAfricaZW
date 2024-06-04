@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : <https://store.webkul.com/license.html/> -->
+<odoo>
+    <data noupdate="1">
+        <record id="wk_beverage" model="pos.category">
+            <field name="name">Beverages</field>
+            <field name="image_128" type="base64" file="pos_multi_cat/static/description/beverage-image.jpg"/>
+        </record>
+        <record id="wk_packed" model="pos.category">
+            <field name="name">Packed Items</field>
+            <field name="image_128" type="base64" file="pos_multi_cat/static/description/packed.jpg"/>
+        </record>
+        <record id="perrier_50cl" model="product.product">
+            <field name="available_in_pos">True</field>
+            <field name="list_price">0.71</field>
+            <field name="name">50cl Perrier</field>
+            <field name="pos_categ_id" eval="[(6, 0, [ref('wk_beverage'),ref('wk_packed')])]"/>
+            <field name="image_1024" type="base64" file="pos_multi_cat/static/description/perrier_50cl-image.jpg"/>
+        </record>
+    </data>
+</odoo>
