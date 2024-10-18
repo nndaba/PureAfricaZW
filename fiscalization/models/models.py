@@ -73,6 +73,8 @@ class account_move(models.Model):
                     'invoice_id': invoice.id,
                     'invoice_number': invoice.name,
                     'customer_name': invoice.partner_id.name,
+                    'customer_vat': invoice.partner_id.vat,
+                    'customer_tin': invoice.partner_id.x_studio_tin_number,
                     'address': invoice.partner_id.street,
                     'phone': invoice.partner_id.mobile,
                     'amount': invoice.amount_total,
