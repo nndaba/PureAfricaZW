@@ -122,7 +122,8 @@ class account_move(models.Model):
                         'price': line.price_unit,
                         'amount': line.price_total,
                         'tax': line.price_total - line.price_subtotal,
-                        'tax_r': 0.15
+                        'tax_r': 0.15,
+                        'tax_records': tax_records
                     }
 
                     _lines.append(parsed_line)
