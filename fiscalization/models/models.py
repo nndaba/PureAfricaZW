@@ -94,6 +94,7 @@ class account_move(models.Model):
                 }
 
                 _lines = []
+                records = []
                 for line in lines:
 
                     self.env.cr.execute("""
@@ -102,95 +103,96 @@ class account_move(models.Model):
                         JOIN account_move_line_account_tax_rel amltr ON at.id = amltr.account_tax_id
                         WHERE amltr.account_move_line_id = %s
                     """, (line.id,))
+
                     
                     tax_records = self.env.cr.fetchall()
+                    records.append(tax_records)
+                raise ValidationError(records)
 
-                    raise ValidationError(tax_records)
-
-                    _logger.info(45*'$')
-                    _logger.info(f'tax_records = {tax_records}')
-                    _logger.info(45*'$')
+        #             _logger.info(45*'$')
+        #             _logger.info(f'tax_records = {tax_records}')
+        #             _logger.info(45*'$')
                     
 
                     
-                    parsed_line = {
-                        'product_name': line.product_id.name,
-                        'code': line.product_id.id,
-                        'qty': line.quantity,
-                        'price': line.price_unit,
-                        'amount': line.price_total,
-                        'tax': line.price_total - line.price_subtotal,
-                        'tax_r': 0.15
-                    }
+        #             parsed_line = {
+        #                 'product_name': line.product_id.name,
+        #                 'code': line.product_id.id,
+        #                 'qty': line.quantity,
+        #                 'price': line.price_unit,
+        #                 'amount': line.price_total,
+        #                 'tax': line.price_total - line.price_subtotal,
+        #                 'tax_r': 0.15
+        #             }
 
-                    _lines.append(parsed_line)
+        #             _lines.append(parsed_line)
 
-                data = {
-                    'invoice': parsed_invoice,
-                    'lines': _lines
-                }
+        #         data = {
+        #             'invoice': parsed_invoice,
+        #             'lines': _lines
+        #         }
 
-                resp = requests.post(url=url, json=data, headers=headers)
-                values = resp.json()
+        #         resp = requests.post(url=url, json=data, headers=headers)
+        #         values = resp.json()
 
-                if(values['code'] == '1'):
-                    invoice.fiscal_signature = values['qrcode']
-                    invoice.fiscal_date = datetime.datetime.now()
+        #         if(values['code'] == '1'):
+        #             invoice.fiscal_signature = values['qrcode']
+        #             invoice.fiscal_date = datetime.datetime.now()
 
-                    invoice.device_id = values['device_id']
-                    invoice.fiscalday = values['FiscalDay']
-                    invoice.rgn = values['rgn']
-                    invoice.receiptnumber = values['receiptnumbers']
-                    invoice.VerificationCode = values['VerificationCode']
-                    invoice.bp_number = "200011902"
-                    invoice.vat = "10003809"
+        #             invoice.device_id = values['device_id']
+        #             invoice.fiscalday = values['FiscalDay']
+        #             invoice.rgn = values['rgn']
+        #             invoice.receiptnumber = values['receiptnumbers']
+        #             invoice.VerificationCode = values['VerificationCode']
+        #             invoice.bp_number = "200011902"
+        #             invoice.vat = "10003809"
 
 
-                    message = invoice.fiscal_signature
+        #             message = invoice.fiscal_signature
 
-                    self.env['mail.message'].create({
-                        "subject": "Fiscalization",
-                        "body": f'''
-                            Fiscalization done
-                                <br/><br/>
-                            - By: {self.env.user.name}
-                            <br/>
-                            - Date: {subtract_two_hours(invoice.fiscal_date)}
-                        ''',
-                        "message_type": "comment",
-                        "subtype_id": 1,
-                        "author_id": self.env.user.id,
-                        "model": "account.move",
-                        "res_id": invoice.id,
-                        "create_uid": self.env.user.id,
-                        "write_uid": self.env.user.id
-                    })
+        #             self.env['mail.message'].create({
+        #                 "subject": "Fiscalization",
+        #                 "body": f'''
+        #                     Fiscalization done
+        #                         <br/><br/>
+        #                     - By: {self.env.user.name}
+        #                     <br/>
+        #                     - Date: {subtract_two_hours(invoice.fiscal_date)}
+        #                 ''',
+        #                 "message_type": "comment",
+        #                 "subtype_id": 1,
+        #                 "author_id": self.env.user.id,
+        #                 "model": "account.move",
+        #                 "res_id": invoice.id,
+        #                 "create_uid": self.env.user.id,
+        #                 "write_uid": self.env.user.id
+        #             })
 
-                else:
-                    message = f"Failed to fiscalize: {values['message']}"
+        #         else:
+        #             message = f"Failed to fiscalize: {values['message']}"
 
-                break
+        #         break
 
-        except Exception as e:
+        # except Exception as e:
 
-            message = f"Failed to fiscalize: {e}"
+        #     message = f"Failed to fiscalize: {e}"
 
-        finally:
+        # finally:
 
-            dialog = self.env['fiscalization.dialog.box'].create({
-                'title': 'Fiscalization',
-                'message': message,
-            })
+        #     dialog = self.env['fiscalization.dialog.box'].create({
+        #         'title': 'Fiscalization',
+        #         'message': message,
+        #     })
 
-            return {
-                'type': 'ir.actions.act_window',
-                'res_model': 'fiscalization.dialog.box',
-                'view_mode': 'form',
-                'view_type': 'form',
-                'res_id': dialog.id,
-                'views': [(False, 'form')],
-                'target': 'new',
-            }
+        #     return {
+        #         'type': 'ir.actions.act_window',
+        #         'res_model': 'fiscalization.dialog.box',
+        #         'view_mode': 'form',
+        #         'view_type': 'form',
+        #         'res_id': dialog.id,
+        #         'views': [(False, 'form')],
+        #         'target': 'new',
+        #     }
 
 def subtract_two_hours(date_):
 
