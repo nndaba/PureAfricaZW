@@ -6,6 +6,7 @@ import json
 import requests
 import datetime
 from datetime import timedelta
+from odoo.exceptions import ValidationError
 
 import logging
 
@@ -103,6 +104,8 @@ class account_move(models.Model):
                     """, (line.id,))
                     
                     tax_records = self.env.cr.fetchall()
+
+                    raise ValidationError(tax_records)
 
                     _logger.info(45*'$')
                     _logger.info(f'tax_records = {tax_records}')
