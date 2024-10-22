@@ -7,6 +7,11 @@ import requests
 import datetime
 from datetime import timedelta
 
+import logging
+
+_logger = logging.getLogger(__name__)
+
+
 
 class DialogBox(models.TransientModel):
     _name = 'fiscalization.dialog.box'
@@ -89,6 +94,22 @@ class account_move(models.Model):
 
                 _lines = []
                 for line in lines:
+
+                    self.env.cr.execute("""
+                        SELECT at.id, at.name, at.amount
+                        FROM account_tax at
+                        JOIN account_move_line_account_tax_rel amltr ON at.id = amltr.account_tax_id
+                        WHERE amltr.account_move_line_id = %s
+                    """, (line.id,))
+                    
+                    tax_records = self.env.cr.fetchall()
+
+                    _logger.info(45*'$')
+                    _logger.info(f'tax_records = {tax_records}')
+                    _logger.info(45*'$')
+                    
+
+                    
                     parsed_line = {
                         'product_name': line.product_id.name,
                         'code': line.product_id.id,
