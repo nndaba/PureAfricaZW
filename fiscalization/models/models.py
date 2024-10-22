@@ -107,7 +107,7 @@ class account_move(models.Model):
                     
                     tax_records = self.env.cr.fetchall()
                     records.append(tax_records)
-                    raise ValidationError(records)
+                    # raise ValidationError(records)
 
                     _logger.info(45*'$')
                     _logger.info(f'tax_records = {tax_records}')
